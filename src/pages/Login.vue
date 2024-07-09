@@ -1,0 +1,135 @@
+<script setup lang="ts">
+import Login from '@/assets/login-bg.jpg'
+import axios from 'axios'
+import { reactive, ref, toRaw, watchEffect } from 'vue'
+import ErrorComponent from '@/components/base/ErrorComponent.vue'
+import { ComponentSize, FormInstance, FormRules } from 'element-plus'
+import { Lock, User } from '@element-plus/icons-vue'
+import InputBase from '@/components/base/InputBase.vue'
+import Button from '@/components/base/Button.vue'
+
+interface RuleForm {
+  email: string
+  password: string
+}
+const formSize = ref<ComponentSize>('default')
+
+const form = reactive({
+  email: '',
+  password: '',
+  rememberCheckbox: false
+})
+
+const ruleFormRef = ref<FormInstance>()
+const loginErrorData = ref<{ message: string; success: boolean }>()
+const isOpenDialogErrorLogin = ref<boolean>()
+
+const onSubmit = async (formEl: FormInstance | undefined) => {
+  const user = toRaw(form)
+  if (!formEl) {
+    return
+  }
+
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      const response = await axios.post('http://localhost:3000/api/v1/users/login', {
+        email: user.email || '',
+        password: user.password || ''
+      })
+      console.log(response)
+      if (!response.data.success) {
+        loginErrorData.value = response.data
+        isOpenDialogErrorLogin.value = true
+        return
+      }
+      console.log(123)
+
+      const token = response.data.token
+      localStorage.setItem('token', token)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      console.log('Đăng nhập thành công')
+    } else {
+      console.log('error', fields)
+    }
+  })
+}
+const rules = reactive<FormRules<RuleForm>>({
+  email: [
+    { required: true, message: 'Vui lòng nhập email', trigger: 'blur' },
+    { type: 'email', message: 'Vui lòng nhập đúng địa chỉ email', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+    {
+      min: 6,
+      message: 'Mật khẩu phải có ít nhất 6 kí tự',
+      trigger: 'blur'
+    }
+  ]
+})
+const onCheckboxChange = (value: boolean) => {
+  form.rememberCheckbox = value
+}
+</script>
+<template>
+  <div class="flex h-screen">
+    <div class="flex w-full">
+      <div class="hidden md:flex w-1/2 bg-blue-50 justify-center items-center">
+        <div class="text-center">
+          <span class="text-[40px] font-bold text-blue-600 relative top-[-90px] left-[-255px]"
+            >Sociala.</span
+          >
+          <img :src="Login" alt="Login Illustration" class="max-w-sm mx-auto" />
+        </div>
+      </div>
+      <div class="flex flex-col justify-center w-1/2 p-20">
+        <h2 class="text-4xl font-bold mb-10">Login into your account</h2>
+
+        <el-form
+          class="flex flex-col gap-3"
+          ref="ruleFormRef"
+          :rules="rules"
+          :model="form"
+          :size="formSize"
+          status-icon
+        >
+          <el-form-item prop="email">
+            <InputBase type="email" placehoder="Email" v-model="form.email" :icon="User" />
+          </el-form-item>
+          <el-form-item prop="password">
+            <InputBase type="password" placehoder="Mật khẩu" v-model="form.password" :icon="Lock" />
+          </el-form-item>
+          <div class="flex justify-between items-center mb-6">
+            <el-checkbox :value="form.rememberCheckbox" name="type" @change="onCheckboxChange">
+              Simple brand exposure
+            </el-checkbox>
+            <a href="#" class="text-[#343a40] font-semibold">Forgot your Password?</a>
+          </div>
+          <el-form-item>
+            <Button
+              classFromParent="w-full py-6 bg-[#343a40] text-white py-2 rounded-md hover:bg-[#41474f] border-none"
+              @click="onSubmit(ruleFormRef)"
+            >
+              Login
+            </Button>
+          </el-form-item>
+          <div class="text-center">
+            <p class="mb-4">
+              Don't have an account? <a href="#" class="text-blue-600 font-semibold">Register</a>
+              <div>{{ loginErrorData?.success }}</div>
+            </p>
+          </div>
+        </el-form>
+      </div>
+    </div>
+  </div>
+
+  <el-dialog v-model="isOpenDialogErrorLogin" :title="loginErrorData?.message" width="50%" align-center class="rounded-lg p-10">
+    <span class=" my-8">Email hoặc mật khẩu không chính xác. Vui lòng thử lại!</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <Button  @click="isOpenDialogErrorLogin = false"> Ok </Button>
+      </span>
+    </template>
+  </el-dialog>
+</template>
