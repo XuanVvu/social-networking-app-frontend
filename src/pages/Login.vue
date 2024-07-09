@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import Login from '@/assets/login-bg.jpg'
 import axios from 'axios'
-import { reactive, ref, toRaw, watchEffect } from 'vue'
-import ErrorComponent from '@/components/base/ErrorComponent.vue'
-import { ComponentSize, FormInstance, FormRules } from 'element-plus'
+import { reactive, ref, toRaw } from 'vue'
+import { ComponentSize, FormInstance, FormRules, ElNotification } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue'
 import InputBase from '@/components/base/InputBase.vue'
 import Button from '@/components/base/Button.vue'
+import useNavigation from "@/composables/useNavigation"
+import { BASE_URL } from '@/constants/baseUrl'
 
 interface RuleForm {
   email: string
@@ -23,6 +24,10 @@ const form = reactive({
 const ruleFormRef = ref<FormInstance>()
 const loginErrorData = ref<{ message: string; success: boolean }>()
 const isOpenDialogErrorLogin = ref<boolean>()
+const {navigateTo} = useNavigation()
+
+console.log(BASE_URL);
+
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
   const user = toRaw(form)
@@ -31,26 +36,31 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   }
 
   await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      const response = await axios.post('http://localhost:3000/api/v1/users/login', {
-        email: user.email || '',
-        password: user.password || ''
-      })
-      console.log(response)
-      if (!response.data.success) {
-        loginErrorData.value = response.data
-        isOpenDialogErrorLogin.value = true
-        return
-      }
-      console.log(123)
-
-      const token = response.data.token
-      localStorage.setItem('token', token)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-      console.log('Đăng nhập thành công')
-    } else {
-      console.log('error', fields)
+    if (!valid) {
+      return;
     }
+    
+    const response = await axios.post(`${BASE_URL}/users/login`, {
+      email: user.email || '',
+      password: user.password || ''
+    })
+    if (!response.data.success) {
+      loginErrorData.value = response.data
+      isOpenDialogErrorLogin.value = true
+      return
+    }
+    console.log(123)
+    console.log(response);
+    
+    const token = response.data.data.access_token
+    localStorage.setItem('token', token)
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    ElNotification({
+      title: 'Thành công',
+      message: 'Đăng nhập thành công!',
+      type: 'success'
+    })
+    navigateTo('/')
   })
 }
 const rules = reactive<FormRules<RuleForm>>({
@@ -107,7 +117,7 @@ const onCheckboxChange = (value: boolean) => {
           </div>
           <el-form-item>
             <Button
-              classFromParent="w-full py-6 bg-[#343a40] text-white py-2 rounded-md hover:bg-[#41474f] border-none"
+              classFromParent="w-full py-6 py-2"
               @click="onSubmit(ruleFormRef)"
             >
               Login
@@ -124,7 +134,7 @@ const onCheckboxChange = (value: boolean) => {
     </div>
   </div>
 
-  <el-dialog v-model="isOpenDialogErrorLogin" :title="loginErrorData?.message" width="50%" align-center class="rounded-lg p-10">
+  <el-dialog v-model="isOpenDialogErrorLogin" :title="loginErrorData?.message" width="50%" align-center class="rounded-lg p-8">
     <span class=" my-8">Email hoặc mật khẩu không chính xác. Vui lòng thử lại!</span>
     <template #footer>
       <span class="dialog-footer">
