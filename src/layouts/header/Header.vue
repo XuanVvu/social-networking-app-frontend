@@ -33,10 +33,8 @@ const iconHeader = ref([
     </div>
 
     <!-- Right Section -->
-    <div class="flex items-center space-x-4 gap-3">
-      <el-icon class="w-[25px]" v-for="item in iconHeader">
-        <component :is="item.component"
-      /></el-icon>
+    <div class="flex items-center gap-3">
+      <el-icon class="" v-for="item in iconHeader"> <component :is="item.component" /></el-icon>
       <div class="bg-[#eee] w-10 h-10 rounded-full flex items-center justify-center">
         <el-avatar> user </el-avatar>
       </div>
