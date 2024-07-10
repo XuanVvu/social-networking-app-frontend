@@ -1,18 +1,26 @@
 <script setup lang="ts">
-import { Bell, Setting, ChatSquare, Search } from '@element-plus/icons-vue'
+import { Bell, ChatSquare, Search } from '@element-plus/icons-vue'
+import useNavigation from '@/composables/useNavigation'
 import { ref } from 'vue'
-
 const iconHeader = ref([
   {
-    component: Bell
+    component: ChatSquare,
+    isDot: true
   },
   {
-    component: ChatSquare
-  },
-  {
-    component: Setting
+    component: Bell,
+    isDot: false
   }
 ])
+const { logout } = useNavigation()
+const avtDropdown = ref()
+const showClick = () => {
+  avtDropdown.value.handleOpen()
+}
+
+const handleLogout = () => {
+  logout()
+}
 </script>
 <template>
   <div
@@ -33,11 +41,26 @@ const iconHeader = ref([
     </div>
 
     <!-- Right Section -->
-    <div class="flex items-center gap-3">
-      <el-icon class="" v-for="item in iconHeader"> <component :is="item.component" /></el-icon>
-      <div class="bg-[#eee] w-10 h-10 rounded-full flex items-center justify-center">
-        <el-avatar> user </el-avatar>
-      </div>
+    <div class="flex items-center gap-4">
+      <el-badge
+        v-for="item in iconHeader"
+        class="w-[25px]"
+        v-bind="item.isDot ? { 'is-dot': true } : {}"
+      >
+        <component :is="item.component"
+      /></el-badge>
+      <el-dropdown
+        class="bg-[#eee] w-10 h-10 rounded-full flex items-center justify-center"
+        trigger="contextmenu"
+        ref="avtDropdown"
+      >
+        <el-avatar @click="showClick"> user </el-avatar>
+        <template #dropdown>
+          <el-dropdown-menu class="w-[200px] flex items-center">
+            <el-dropdown-item class="w-full" @click="handleLogout">Log out</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 </template>

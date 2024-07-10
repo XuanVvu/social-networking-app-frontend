@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import Login from '@/assets/login-bg.jpg'
-import axios from 'axios'
-import { reactive, ref, toRaw } from 'vue'
-import { ComponentSize, FormInstance, FormRules, ElNotification } from 'element-plus'
+import { onMounted, reactive, ref, toRaw } from 'vue'
+import { ComponentSize, FormInstance, FormRules } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue'
 import InputBase from '@/components/base/InputBase.vue'
 import Button from '@/components/base/Button.vue'
 import useNavigation from "@/composables/useNavigation"
-import { BASE_URL } from '@/constants/baseUrl'
+import callApi from '@/services/api'
 
 interface RuleForm {
   email: string
@@ -26,40 +25,24 @@ const loginErrorData = ref<{ message: string; success: boolean }>()
 const isOpenDialogErrorLogin = ref<boolean>()
 const {navigateTo} = useNavigation()
 
-console.log(BASE_URL);
-
-
 const onSubmit = async (formEl: FormInstance | undefined) => {
   const user = toRaw(form)
   if (!formEl) {
     return
   }
-
-  await formEl.validate(async (valid, fields) => {
+  await formEl.validate(async (valid) => {
     if (!valid) {
       return;
     }
-    
-    const response = await axios.post(`${BASE_URL}/users/login`, {
-      email: user.email || '',
-      password: user.password || ''
-    })
+    const response = await callApi.post<RuleForm>('/users/login', {email: user.email || '', password: user.password || ''})
     if (!response.data.success) {
       loginErrorData.value = response.data
-      isOpenDialogErrorLogin.value = true
+      isOpenDialogErrorLogin.value = true   
       return
     }
-    console.log(123)
-    console.log(response);
-    
     const token = response.data.data.access_token
     localStorage.setItem('token', token)
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    ElNotification({
-      title: 'Thành công',
-      message: 'Đăng nhập thành công!',
-      type: 'success'
-    })
+    callApi.setHeader('Authorization', `Bearer ${token}`)
     navigateTo('/')
   })
 }
@@ -80,6 +63,14 @@ const rules = reactive<FormRules<RuleForm>>({
 const onCheckboxChange = (value: boolean) => {
   form.rememberCheckbox = value
 }
+
+onMounted(() => {
+  const token = localStorage.getItem('token')
+  if(token) {
+    navigateTo('/')
+  }
+  
+})
 </script>
 <template>
   <div class="flex h-screen">
