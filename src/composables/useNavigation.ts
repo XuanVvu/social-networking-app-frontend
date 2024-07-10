@@ -6,5 +6,10 @@ export default function useNavigation() {
     router.push(path)
   }
 
-  return { navigateTo }
+  const logout = () => {
+    localStorage.removeItem('token')
+    router.push('/login')
+  }
+
+  return { navigateTo, logout }
 }

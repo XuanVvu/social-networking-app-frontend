@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { HomeFilled, UserFilled, StarFilled, Promotion, Setting } from '@element-plus/icons-vue'
-import heart from '@/assets/heart.svg'
 const feeds = [
   { name: 'Newsfeed', iconClass: 'bg-blue-600 text-white p-2 rounded-full', component: HomeFilled },
   { name: 'Badges', iconClass: 'bg-red-600 text-white p-2 rounded-full', component: UserFilled },
