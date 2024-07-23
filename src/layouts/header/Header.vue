@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Bell, ChatSquare, Search } from '@element-plus/icons-vue'
 import useNavigation from '@/composables/useNavigation'
+import logo from '@/assets/logo.png'
 import { ref } from 'vue'
 const iconHeader = ref([
   {
@@ -14,9 +15,6 @@ const iconHeader = ref([
 ])
 const { logout } = useNavigation()
 const avtDropdown = ref()
-const showClick = () => {
-  avtDropdown.value.handleOpen()
-}
 
 const handleLogout = () => {
   logout()
@@ -28,7 +26,7 @@ const handleLogout = () => {
   >
     <!-- Left Section -->
     <div class="flex items-center">
-      <span class="text-[30px] font-bold text-blue-600">Sociala.</span>
+      <img class="w-[150px] font-bold text-blue-600" :src="logo" />
     </div>
 
     <!-- Center Section -->
@@ -51,10 +49,10 @@ const handleLogout = () => {
       /></el-badge>
       <el-dropdown
         class="bg-[#eee] w-10 h-10 rounded-full flex items-center justify-center"
-        trigger="contextmenu"
         ref="avtDropdown"
+        trigger="click"
       >
-        <el-avatar @click="showClick"> user </el-avatar>
+        <el-avatar> user </el-avatar>
         <template #dropdown>
           <el-dropdown-menu class="w-[200px] flex items-center">
             <el-dropdown-item class="w-full" @click="handleLogout">Log out</el-dropdown-item>

@@ -3,10 +3,12 @@ import Login from '@/assets/login-bg.jpg'
 import { onMounted, reactive, ref, toRaw } from 'vue'
 import { ComponentSize, FormInstance, FormRules } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue'
+import logo from "@/assets/logo.png"
 import InputBase from '@/components/base/InputBase.vue'
 import Button from '@/components/base/Button.vue'
 import useNavigation from "@/composables/useNavigation"
 import callApi from '@/services/api'
+import { useAuthStore } from '@/store/auth'
 
 interface RuleForm {
   email: string
@@ -24,6 +26,7 @@ const ruleFormRef = ref<FormInstance>()
 const loginErrorData = ref<{ message: string; success: boolean }>()
 const isOpenDialogErrorLogin = ref<boolean>()
 const {navigateTo} = useNavigation()
+const authStore = useAuthStore()
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
   const user = toRaw(form)
@@ -34,7 +37,11 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
     if (!valid) {
       return;
     }
-    const response = await callApi.post<RuleForm>('/users/login', {email: user.email || '', password: user.password || ''})
+    // const response = await callApi.post<RuleForm>('/users/login', {email: user.email || '', password: user.password || ''})
+    const response = await authStore.login(user.email || '', user.password || '');
+    console.log(response);
+    
+    
     if (!response.data.success) {
       loginErrorData.value = response.data
       isOpenDialogErrorLogin.value = true   
@@ -77,9 +84,9 @@ onMounted(() => {
     <div class="flex w-full">
       <div class="hidden md:flex w-1/2 bg-blue-50 justify-center items-center">
         <div class="text-center">
-          <span class="text-[40px] font-bold text-blue-600 relative top-[-90px] left-[-255px]"
-            >Sociala.</span
-          >
+          <img class="w-[250px] font-bold text-blue-600 relative top-[-70px] left-[-100px]" :src="logo"/>
+           
+          
           <img :src="Login" alt="Login Illustration" class="max-w-sm mx-auto" />
         </div>
       </div>

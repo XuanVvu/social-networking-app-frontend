@@ -1,3 +1,4 @@
+import callApi from '@/services/api'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
@@ -9,12 +10,17 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    async login(username: string, password: string) {
+    async login(email: string, password: string) {
       try {
-        const response = await axios.post('/api/login', { username, password })
-        this.fetchUserInfo()
-        this.setAuthData(response.data)
-        return true
+        console.log(2)
+
+        // const response = await callApi.post('/users/login', { email, password })
+        // console.log(response)
+
+        // const token = response.data.data.access_token
+        // callApi.setHeader('Authorizaion', `Bearer ${token}`)
+        // this.setAuthData(response.data)
+        // return response
       } catch (error) {
         console.error('Login failed', error)
         throw error
@@ -22,7 +28,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     setAuthData(data: any) {
-      this.accessToken = data.accessToken
+      this.accessToken = data.access_token
       localStorage.setItem('accessToken', data.accessToken)
     },
 
