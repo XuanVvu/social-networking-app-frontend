@@ -31,6 +31,17 @@ const routes = [
     ]
   },
   {
+    path: '/profile',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'Profile',
+        component: () => import('@/pages/Profile.vue')
+      }
+    ]
+  },
+  {
     path: '/login',
     component: BlankLayout,
     children: [
