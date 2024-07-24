@@ -26,7 +26,7 @@ const feeds = [
 </script>
 <template>
   <div
-    class="bg-[#fbfcfe] p-4 w-72 fixed bottom-0 top-[77px] flex flex-col border-r-2 border-gray-200"
+    class="bg-[#fbfcfe] p-4 w-72 fixed bottom-0 top-[77px] flex flex-col border-r border-gray-200"
   >
     <p class="text-gray-60 font-bold mb-4 text-[14px]">New Feeds</p>
 
@@ -50,8 +50,8 @@ const feeds = [
       <span class="">{{ item.name }}</span>
     </div>
 
-    <div class="mt-auto pt-4 border-t">
-      <button class="flex items-center w-full text-gray-500 hover:text-black px-2">
+    <div class="mt-auto py-3">
+      <button class="flex items-center w-full hover:text-gray-500 px-2">
         <Setting class="w-8 mr-2" />
         <span class="font-semibold">Setting</span>
       </button>

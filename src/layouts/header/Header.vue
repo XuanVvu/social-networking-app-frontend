@@ -3,33 +3,40 @@ import { Bell, ChatSquare, Search } from '@element-plus/icons-vue'
 import useNavigation from '@/composables/useNavigation'
 import logo from '@/assets/logo.png'
 import { ref } from 'vue'
+
+const goToMessager = () => {
+  navigateTo('/inbox')
+}
 const iconHeader = ref([
   {
     component: ChatSquare,
-    isDot: true
+    isDot: true,
+    action: goToMessager
   },
   {
     component: Bell,
     isDot: false
   }
 ])
-const { logout } = useNavigation()
+const { logout, navigateTo } = useNavigation()
 const avtDropdown = ref()
 
 const handleLogout = () => {
   logout()
+}
+
+const goToHome = () => {
+  navigateTo('/')
 }
 </script>
 <template>
   <div
     class="flex bg-white items-center justify-between py-4 px-16 shadow-md fixed inset-x-0 top-0 z-10"
   >
-    <!-- Left Section -->
-    <div class="flex items-center">
+    <div class="flex items-center cursor-pointer" @click="goToHome">
       <img class="w-[150px] font-bold text-blue-600" :src="logo" />
     </div>
 
-    <!-- Center Section -->
     <div class="w-1/2 flex items-center bg-[#eee] rounded-xl px-4">
       <el-icon class="w-[20px]"><Search /></el-icon>
       <input
@@ -38,14 +45,14 @@ const handleLogout = () => {
       />
     </div>
 
-    <!-- Right Section -->
     <div class="flex items-center gap-4">
       <el-badge
         v-for="item in iconHeader"
         class="w-[25px]"
         v-bind="item.isDot ? { 'is-dot': true } : {}"
+        @click="item.action"
       >
-        <component :is="item.component"
+        <component :is="item.component" class="cursor-pointer"
       /></el-badge>
       <el-dropdown
         class="bg-[#eee] w-10 h-10 rounded-full flex items-center justify-center"
