@@ -2,5 +2,5 @@
 const { icon } = defineProps<{ icon: string }>()
 </script>
 <template>
-  <img :src="icon" alt="" class="h-[20px]" />
+  <img :src="icon" alt="" class="h-full" />
 </template>

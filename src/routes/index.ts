@@ -20,6 +20,17 @@ const routes = [
     ]
   },
   {
+    path: '/inbox',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'Inbox',
+        component: () => import('@/pages/Inbox.vue')
+      }
+    ]
+  },
+  {
     path: '/login',
     component: BlankLayout,
     children: [
