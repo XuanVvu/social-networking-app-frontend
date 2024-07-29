@@ -10,7 +10,7 @@ import useNavigation from "@/composables/useNavigation"
 import callApi from '@/services/api'
 import { useAuthStore } from '@/store/auth'
 
-interface RuleForm {
+export interface RuleForm {
   email: string
   password: string
 }
@@ -25,7 +25,7 @@ const form = reactive({
 const ruleFormRef = ref<FormInstance>()
 const loginErrorData = ref<{ message: string; success: boolean }>()
 const isOpenDialogErrorLogin = ref<boolean>()
-const {navigateTo} = useNavigation()
+const { navigateTo } = useNavigation()
 const authStore = useAuthStore()
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
@@ -40,11 +40,11 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
     // const response = await callApi.post<RuleForm>('/users/login', {email: user.email || '', password: user.password || ''})
     const response = await authStore.login(user.email || '', user.password || '');
     console.log(response);
-    
-    
+
+
     if (!response.data.success) {
       loginErrorData.value = response.data
-      isOpenDialogErrorLogin.value = true   
+      isOpenDialogErrorLogin.value = true
       return
     }
     const token = response.data.data.access_token
@@ -73,10 +73,10 @@ const onCheckboxChange = (value: boolean) => {
 
 onMounted(() => {
   const token = localStorage.getItem('token')
-  if(token) {
+  if (token) {
     navigateTo('/')
   }
-  
+
 })
 </script>
 <template>
@@ -84,23 +84,17 @@ onMounted(() => {
     <div class="flex w-full">
       <div class="hidden md:flex w-1/2 bg-blue-50 justify-center items-center">
         <div class="text-center">
-          <img class="w-[250px] font-bold text-blue-600 relative top-[-70px] left-[-100px]" :src="logo"/>
-           
-          
+          <img class="w-[250px] font-bold text-blue-600 relative top-[-70px] left-[-100px]" :src="logo" />
+
+
           <img :src="Login" alt="Login Illustration" class="max-w-sm mx-auto" />
         </div>
       </div>
       <div class="flex flex-col justify-center w-1/2 p-20">
         <h2 class="text-4xl font-bold mb-10">Login into your account</h2>
 
-        <el-form
-          class="flex flex-col gap-3"
-          ref="ruleFormRef"
-          :rules="rules"
-          :model="form"
-          :size="formSize"
-          status-icon
-        >
+        <el-form class="flex flex-col gap-3" ref="ruleFormRef" :rules="rules" :model="form" :size="formSize"
+          status-icon>
           <el-form-item prop="email">
             <InputBase type="email" placehoder="Email" v-model="form.email" :icon="User" />
           </el-form-item>
@@ -114,17 +108,14 @@ onMounted(() => {
             <a href="#" class="text-[#343a40] font-semibold">Forgot your Password?</a>
           </div>
           <el-form-item>
-            <Button
-              classFromParent="w-full py-6 py-2"
-              @click="onSubmit(ruleFormRef)"
-            >
+            <Button classFromParent="w-full py-6 py-2" @click="onSubmit(ruleFormRef)">
               Login
             </Button>
           </el-form-item>
           <div class="text-center">
             <p class="mb-4">
               Don't have an account? <a href="#" class="text-blue-600 font-semibold">Register</a>
-              <div>{{ loginErrorData?.success }}</div>
+            <div>{{ loginErrorData?.success }}</div>
             </p>
           </div>
         </el-form>
@@ -132,11 +123,12 @@ onMounted(() => {
     </div>
   </div>
 
-  <el-dialog v-model="isOpenDialogErrorLogin" :title="loginErrorData?.message" width="50%" align-center class="rounded-lg p-8">
+  <el-dialog v-model="isOpenDialogErrorLogin" :title="loginErrorData?.message" width="50%" align-center
+    class="rounded-lg p-8">
     <span class=" my-8">Email hoặc mật khẩu không chính xác. Vui lòng thử lại!</span>
     <template #footer>
       <span class="dialog-footer">
-        <Button  @click="isOpenDialogErrorLogin = false"> Ok </Button>
+        <Button @click="isOpenDialogErrorLogin = false"> Ok </Button>
       </span>
     </template>
   </el-dialog>
