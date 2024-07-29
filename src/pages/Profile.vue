@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import TopProfile from "@/components/profile/TopProfile.vue"
+import Profile from '@/components/profile/Profile.vue'
 </script>
 
 <template>
-
-        <TopProfile />
+        <Profile />
 </template>
