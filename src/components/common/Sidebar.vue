@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import useNavigation from '@/composables/useNavigation';
 import { HomeFilled, UserFilled, StarFilled, Promotion, Setting } from '@element-plus/icons-vue'
+import CreatePost from "@/components/posts/CreatePost.vue"
+import { ref } from 'vue';
 const feeds = [
   { name: 'Newsfeed', iconClass: 'bg-blue-600 text-white p-2 rounded-full', component: HomeFilled },
   { name: 'Badges', iconClass: 'bg-red-600 text-white p-2 rounded-full', component: UserFilled },
@@ -25,12 +27,18 @@ const feeds = [
   }
 ]
 
+const createPostRef = ref<InstanceType<typeof CreatePost> | null>(null);
+
 const { navigateTo } = useNavigation()
 
 const handleClickSidebarItem = (item: any) => {
   switch (item.name) {
     case 'Profile':
       navigateTo('/profile')
+      break;
+    case 'Create':
+      createPostRef?.value?.openDialog()
+      break;
   }
 
 
@@ -61,4 +69,7 @@ const handleClickSidebarItem = (item: any) => {
       </button>
     </div>
   </div>
+
+  <CreatePost ref="createPostRef" />
+
 </template>

@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import Login from '@/assets/login-bg.jpg'
-import { ComponentSize, FormInstance } from 'element-plus';
+import { ComponentSize, FormInstance, FormRules } from 'element-plus';
 import { ref, reactive } from 'vue';
+import { Lock, User } from '@element-plus/icons-vue'
+import logo from "@/assets/logo.png"
 import InputBase from '@/components/base/InputBase.vue'
 import Button from '@/components/base/Button.vue'
 import useNavigation from '@/composables/useNavigation';
+import { RuleForm } from './Login.vue';
 const formSize = ref<ComponentSize>('default')
 
 const form = reactive({
@@ -18,6 +21,21 @@ const { navigateTo } = useNavigation()
 const onSubmit = () => {
     navigateTo('/login')
 }
+
+const rules = reactive<FormRules<RuleForm>>({
+    email: [
+        { required: true, message: 'Vui lòng nhập email', trigger: 'blur' },
+        { type: 'email', message: 'Vui lòng nhập đúng địa chỉ email', trigger: 'blur' }
+    ],
+    password: [
+        { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
+        {
+            min: 6,
+            message: 'Mật khẩu phải có ít nhất 6 kí tự',
+            trigger: 'blur'
+        }
+    ]
+})
 </script>
 <template>
     <div class="flex h-screen">
@@ -41,7 +59,7 @@ const onSubmit = () => {
                     </el-form-item>
 
                     <el-form-item>
-                        <Button classFromParent="w-full py-6 py-2" @click="onSubmit(ruleFormRef)">
+                        <Button classFromParent="w-full py-6 py-2" @click="onSubmit()">
                             Đăng ký
                         </Button>
                     </el-form-item>
