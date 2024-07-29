@@ -53,6 +53,17 @@ const routes = [
     ]
   },
   {
+    path: '/register',
+    component: BlankLayout,
+    children: [
+      {
+        path: '',
+        name: 'Register',
+        component: () => import('@/pages/Register.vue')
+      }
+    ]
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'Page Not Found',
     component: () => import('@/pages/NotFound.vue')
