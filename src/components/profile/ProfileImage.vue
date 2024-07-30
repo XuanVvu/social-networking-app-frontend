@@ -3,7 +3,7 @@ import ImageBox from "./ImageBox.vue"
 </script>
 
 <template>
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-3 gap-2">
         <ImageBox />
         <ImageBox />
         <ImageBox />

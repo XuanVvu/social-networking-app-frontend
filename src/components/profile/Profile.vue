@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import ListPosts from "@/components/profile/ListPosts.vue"
 import ProfileImage from "@/components/profile/ProfileImage.vue"
+import FriendList from "@/components/friends/FriendList.vue"
 
 const activeName = ref('first')
 
@@ -33,7 +34,9 @@ const activeName = ref('first')
       <el-tab-pane label="Ảnh" name="second">
         <ProfileImage />
       </el-tab-pane>
-      <el-tab-pane label="Bạn bè" name="third">Bạn bè</el-tab-pane>
+      <el-tab-pane label="Bạn bè" name="third">
+        <FriendList :itemPerLine=4 />
+      </el-tab-pane>
       <el-tab-pane label="Task" name="fourth">Task</el-tab-pane>
     </div>
   </el-tabs>

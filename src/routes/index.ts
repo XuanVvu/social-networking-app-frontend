@@ -42,6 +42,17 @@ const routes = [
     ]
   },
   {
+    path: '/friends',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'Friends',
+        component: () => import('@/pages/Friends.vue')
+      }
+    ]
+  },
+  {
     path: '/login',
     component: BlankLayout,
     children: [

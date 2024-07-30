@@ -4,26 +4,30 @@ import { HomeFilled, UserFilled, StarFilled, Promotion, Setting } from '@element
 import CreatePost from "@/components/posts/CreatePost.vue"
 import { ref } from 'vue';
 const feeds = [
-  { name: 'Newsfeed', iconClass: 'bg-blue-600 text-white p-2 rounded-full', component: HomeFilled },
-  { name: 'Badges', iconClass: 'bg-red-600 text-white p-2 rounded-full', component: UserFilled },
+  { name: 'Newsfeed', iconClass: 'bg-blue-600 text-white p-2 rounded-full', component: HomeFilled, idScreen: 'new-feed' },
+  { name: 'Bạn bè', iconClass: 'bg-red-600 text-white p-2 rounded-full', component: UserFilled, idScreen: 'friends' },
   {
     name: 'Explore Stories',
     iconClass: 'bg-yellow-500 text-white p-2 rounded-full',
-    component: StarFilled
+    component: StarFilled,
+    idScreen: 'new-feed1'
   },
   {
     name: 'Chat GPT',
     iconClass: 'bg-red-400 text-white p-2 rounded-full',
-    component: Promotion
+    component: Promotion,
+    idScreen: 'new-feed1'
   },
   {
-    name: 'Create',
+    name: 'Tạo',
     iconClass: 'bg-red-400 text-white p-2 rounded-full',
-    component: Promotion
+    component: Promotion,
+    idScreen: 'create-post'
   },
   {
-    name: 'Profile',
-    iconClass: 'rounded-full'
+    name: 'Trang cá nhân',
+    iconClass: 'rounded-full',
+    idScreen: 'profile'
   }
 ]
 
@@ -32,13 +36,17 @@ const createPostRef = ref<InstanceType<typeof CreatePost> | null>(null);
 const { navigateTo } = useNavigation()
 
 const handleClickSidebarItem = (item: any) => {
-  switch (item.name) {
-    case 'Profile':
+  switch (item.idScreen) {
+    case 'profile':
       navigateTo('/profile')
       break;
-    case 'Create':
+    case 'create-post':
       createPostRef?.value?.openDialog()
       break;
+    case 'friends':
+      navigateTo('/friends')
+      break;
+
   }
 
 
