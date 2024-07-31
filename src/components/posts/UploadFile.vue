@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
+import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue'
 
 import type { UploadFile } from 'element-plus'
 

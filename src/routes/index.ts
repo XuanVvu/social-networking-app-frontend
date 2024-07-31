@@ -36,8 +36,26 @@ const routes = [
     children: [
       {
         path: '',
+        redirect: '/profile/posts',
         name: 'Profile',
-        component: () => import('@/pages/Profile.vue')
+        component: () => import('@/pages/Profile/Profile.vue'),
+        children: [
+          {
+            path: 'posts',
+            name: 'Posts',
+            component: () => import('@/pages/Profile/ListPost.vue')
+          },
+          {
+            path: 'images',
+            name: 'Images',
+            component: () => import('@/pages/Profile/Images.vue')
+          },
+          {
+            path: 'friends',
+            name: 'ProfileFriends',
+            component: () => import('@/pages/Profile/Friends.vue')
+          }
+        ]
       }
     ]
   },
