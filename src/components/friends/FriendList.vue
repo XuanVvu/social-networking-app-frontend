@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import FriendBox from '@/components/friends/FriendBox.vue';
-
-const { itemPerLine } = defineProps<{ itemPerLine?: number }>()
+const { itemPerLine } = defineProps<{ itemPerLine?: string }>()
 
 </script>
 <template>
-    <div :class="`grid grid-cols-${itemPerLine ? itemPerLine : 6} gap-4 flex-1`">
+    <div :class="`grid gap-4 ${itemPerLine ? itemPerLine : 'grid-cols-6'}`">
         <FriendBox :role-friend=0 />
         <FriendBox :role-friend=0 />
         <FriendBox :role-friend=0 />

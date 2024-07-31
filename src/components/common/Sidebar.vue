@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import useNavigation from '@/composables/useNavigation';
-import { HomeFilled, UserFilled, StarFilled, Promotion, Setting } from '@element-plus/icons-vue'
+import { HomeFilled, UserFilled, StarFilled, Promotion, Setting, Comment } from '@element-plus/icons-vue'
 import CreatePost from "@/components/posts/CreatePost.vue"
 import { ref } from 'vue';
 const feeds = [
-  { name: 'Newsfeed', iconClass: 'bg-blue-600 text-white p-2 rounded-full', component: HomeFilled, idScreen: 'new-feed' },
+  { name: 'Bảng tin', iconClass: 'bg-blue-600 text-white p-2 rounded-full', component: HomeFilled, idScreen: 'new-feed' },
   { name: 'Bạn bè', iconClass: 'bg-red-600 text-white p-2 rounded-full', component: UserFilled, idScreen: 'friends' },
   {
-    name: 'Explore Stories',
+    name: 'Tin nhắn',
     iconClass: 'bg-yellow-500 text-white p-2 rounded-full',
-    component: StarFilled,
+    component: Comment,
+    idScreen: 'chat'
+  },
+  {
+    name: 'Thông báo',
+    iconClass: 'bg-red-400 text-white p-2 rounded-full',
+    component: Promotion,
     idScreen: 'new-feed1'
   },
   {
@@ -37,8 +43,11 @@ const { navigateTo } = useNavigation()
 
 const handleClickSidebarItem = (item: any) => {
   switch (item.idScreen) {
+    case 'new-feed':
+      navigateTo('/')
+      break;
     case 'profile':
-      navigateTo('/profile')
+      navigateTo('/profile/posts')
       break;
     case 'create-post':
       createPostRef?.value?.openDialog()

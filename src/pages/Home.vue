@@ -5,7 +5,7 @@ import FriendSuggestions from '@/components/friends/FriendSuggestions.vue'
 
 <template>
   <div class="bg-[#fbfcfe]">
-    <div class="flex w-[1000px] mx-auto gap-7">
+    <div class="flex w-[1050px] mx-auto gap-7">
       <div>
         <div class="my-5">
           <PostComponents />
