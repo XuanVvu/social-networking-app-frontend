@@ -114,7 +114,7 @@ onMounted(() => {
           </el-form-item>
           <div class="text-center">
             <p class="mb-4">
-              Don't have an account? <a href="#" class="text-blue-600 font-semibold">Register</a>
+              Don't have an account? <a href="/register" class="text-blue-600 font-semibold">Register</a>
             <div>{{ loginErrorData?.success }}</div>
             </p>
           </div>

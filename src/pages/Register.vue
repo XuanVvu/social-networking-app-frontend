@@ -11,7 +11,7 @@ import { RuleForm } from './Login.vue';
 const formSize = ref<ComponentSize>('default')
 
 const form = reactive({
-    firtName:'',
+    firstName:'',
     lastName:'',
     email: '',
     password: '',
@@ -77,10 +77,10 @@ const rules = reactive<FormRules<RuleForm &{confirmPassword: string; firstName: 
                 <el-form class="flex flex-col gap-3" ref="ruleFormRef" :rules="rules" :model="form" :size="formSize"
                     status-icon>
                     <el-form-item prop="firstName">
-                        <InputBase type="text" placehoder="First name" v-model="form.firtName" :icon="User" />
+                        <InputBase type="text" placehoder="First name" v-model="form.firstName" />
                     </el-form-item>
                     <el-form-item prop="firstName">
-                        <InputBase type="text" placehoder="Last name" v-model="form.lastName" :icon="User" />
+                        <InputBase type="text" placehoder="Last name" v-model="form.lastName" />
                     </el-form-item>
                     <el-form-item prop="email">
                         <InputBase type="email" placehoder="Email" v-model="form.email" :icon="User" />
