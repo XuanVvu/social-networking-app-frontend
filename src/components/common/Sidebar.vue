@@ -88,13 +88,13 @@ const handleClickSidebarItem = (item: any) => {
 
     <div class="mt-auto py-3">
       <button class="flex items-center w-full hover:text-gray-500 px-2">
-  
+
       </button>
     </div>
   </div>
 
   <CreatePost ref="createPostRef" />
 
-  <ListNotifications ref="notificationRef"/>
+  <ListNotifications ref="notificationRef" />
 
 </template>

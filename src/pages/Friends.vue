@@ -25,7 +25,7 @@ const options = [
 <template>
     <div class="p-[60px] h-[100vh]">
         <div class="bg-white px-6 py-12 border mb-4 flex items-center justify-between">
-            <h1 class="font-bold text-2xl">Friends</h1>
+            <h1 class="font-bold text-2xl">Bạn bè</h1>
             <el-select v-model="value" class="m-2 w-[200px]" placeholder="Select" size="large">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
