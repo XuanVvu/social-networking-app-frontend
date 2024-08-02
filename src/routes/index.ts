@@ -93,6 +93,17 @@ const routes = [
     ]
   },
   {
+    path: '/settings',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'Settings',
+        component: () => import('@/pages/Settings.vue')
+      }
+    ]
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'Page Not Found',
     component: () => import('@/pages/NotFound.vue')

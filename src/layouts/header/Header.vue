@@ -56,7 +56,7 @@ const goToHome = () => {
         <el-avatar> user </el-avatar>
         <template #dropdown>
           <el-dropdown-menu class="w-[200px] flex items-center">
-            <el-dropdown-item class="w-full">Settings</el-dropdown-item>
+            <el-dropdown-item class="w-full" @click="() => navigateTo('/settings')">Settings</el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu class="w-[200px] flex items-center">
             <el-dropdown-item class="w-full" @click="handleLogout">Log out</el-dropdown-item>

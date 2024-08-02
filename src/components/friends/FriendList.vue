@@ -9,26 +9,8 @@ const { itemPerLine } = defineProps<{ itemPerLine?: string }>()
         <FriendBox :role-friend=0 />
         <FriendBox :role-friend=0 />
         <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
-        <FriendBox :role-friend=0 />
+
+
 
     </div>
 </template>
