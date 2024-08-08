@@ -3,6 +3,12 @@ import heart from '@/assets/heart.svg'
 import shareIcon from '@/assets/share.svg'
 import Icon from '@/components/base/Icon.vue'
 import commentIcon from '@/assets/comment-icon.svg'
+import { MoreFilled } from '@element-plus/icons-vue'
+import DialogConfirm from '@/components/common/DialogConfirm.vue'
+import CreatePost from "@/components/posts/CreatePost.vue"
+import { ref } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+
 
 const iconList = [
   {
@@ -35,15 +41,65 @@ const listPostImage = [
   },
 
 ]
+
+const dialogValue = ref<boolean>(false)
+const createPostRef = ref()
+
+const openEditScreen = () => {
+  createPostRef?.value?.openDialog()
+}
+
+const deletePost = () => {
+  dialogValue.value = true
+
+  ElMessageBox.confirm(
+    'Bạn có chắc chắn muốn xóa bài viết này không?',
+    'Xóa bài viêt',
+    {
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+      type: 'error',
+      dangerouslyUseHTMLString: true,
+      customClass: 'delete-dialog'
+    }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: 'Bài viết đã được xóa thành công.',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Đã xảy ra lỗi khi xóa bài viết. Vui lòng thử lại.',
+      })
+    })
+
+}
 </script>
 <template>
   <div class="border rounded-lg px-8 py-4 shadow-md bg-[#fff]">
-    <div class="flex items-center mb-4">
-      <img class="w-10 h-10 rounded-full mr-4" alt="Profile Picture" />
-      <div>
-        <div class="font-bold">{{ 'userName' }}</div>
-        <div class="text-sm text-gray-500">{{ 'postTime' }}</div>
+    <div class="flex justify-between mb-4">
+      <div class="flex items-center">
+        <img class="w-10 h-10 rounded-full mr-4" alt="Profile Picture" />
+        <div>
+          <div class="font-bold">{{ 'userName' }}</div>
+          <div class="text-sm text-gray-500">{{ 'postTime' }}</div>
+        </div>
+
       </div>
+      <el-dropdown class="" trigger="click">
+        <MoreFilled class="w-[20px] cursor-pointer outline-none" />
+        <template #dropdown>
+          <el-dropdown-menu class="w-[200px] flex items-center">
+            <el-dropdown-item class="w-full" @click="openEditScreen">Edit</el-dropdown-item>
+          </el-dropdown-menu>
+          <el-dropdown-menu class="w-[200px] flex items-center">
+            <el-dropdown-item class="w-full text-red-500" @click="deletePost">Delete</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
     <div class="mb-8">
       <p class="mb-4">{{ 'postText' }}</p>
@@ -62,10 +118,18 @@ const listPostImage = [
       </button>
     </div>
   </div>
+
+  <!-- <DialogConfirm v-model="dialogValue" /> -->
+  <CreatePost ref="createPostRef" />
 </template>
 
 <style>
 .el-carousel__container {
   height: 680px !important;
+}
+
+.delete-dialog .el-message-box__btns .el-button--primary {
+  background-color: #F56C6C;
+  border: #F56C6C;
 }
 </style>
