@@ -4,18 +4,24 @@ import shareIcon from '@/assets/share.svg'
 import Icon from '@/components/base/Icon.vue'
 import commentIcon from '@/assets/comment-icon.svg'
 import { MoreFilled } from '@element-plus/icons-vue'
-import DialogConfirm from '@/components/common/DialogConfirm.vue'
 import CreatePost from "@/components/posts/CreatePost.vue"
+import PostDetail from '@/components/posts/PostDetail.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+
+const openCommentPost = () => {
+  postDetailRef?.value?.openPostDetail()
+
+}
 
 const iconList = [
   {
     icon: heart
   },
   {
-    icon: commentIcon
+    icon: commentIcon,
+    onClick: openCommentPost
   },
   {
     icon: shareIcon
@@ -44,6 +50,7 @@ const listPostImage = [
 
 const dialogValue = ref<boolean>(false)
 const createPostRef = ref()
+const postDetailRef = ref()
 
 const openEditScreen = () => {
   createPostRef?.value?.openDialog()
@@ -113,7 +120,8 @@ const deletePost = () => {
       </div>
     </div>
     <div class="flex text-gray-600 gap-6">
-      <button v-for="iconItem in iconList" class="flex items-center space-x-4 hover:text-gray-900 h-[25px]">
+      <button v-for="iconItem in iconList" class="flex items-center space-x-4 hover:text-gray-900 h-[25px]"
+        @click="iconItem.onClick">
         <Icon :icon="iconItem.icon" />
       </button>
     </div>
@@ -121,6 +129,7 @@ const deletePost = () => {
 
   <!-- <DialogConfirm v-model="dialogValue" /> -->
   <CreatePost ref="createPostRef" />
+  <PostDetail ref="postDetailRef" />
 </template>
 
 <style>
