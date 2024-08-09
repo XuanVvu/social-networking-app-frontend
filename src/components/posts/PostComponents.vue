@@ -110,14 +110,11 @@ const deletePost = () => {
     </div>
     <div class="mb-8">
       <p class="mb-4">{{ 'postText' }}</p>
-      <div>
-
-        <el-carousel trigger="click" :autoplay="false" class="w-[680px] h-[680px]">
-          <el-carousel-item v-for="item in listPostImage" :key="item.id">
-            <img class="rounded-sm w-full h-full object-cover" :src="item.url" alt="Post Image" />
-          </el-carousel-item>
-        </el-carousel>
-      </div>
+      <el-carousel trigger="click" :autoplay="false" class="w-[680px] h-[680px]">
+        <el-carousel-item v-for="item in listPostImage" :key="item.id">
+          <img class="rounded-sm w-full h-full object-cover" :src="item.url" alt="Post Image" />
+        </el-carousel-item>
+      </el-carousel>
     </div>
     <div class="flex text-gray-600 gap-6">
       <button v-for="iconItem in iconList" class="flex items-center space-x-4 hover:text-gray-900 h-[25px]"
