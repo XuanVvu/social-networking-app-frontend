@@ -80,6 +80,10 @@ onMounted(() => {
 </template>
 
 <style>
+.el-tabs {
+  display: block;
+}
+
 .el-tabs__active-bar {
   top: 0;
 }
