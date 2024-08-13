@@ -2,5 +2,8 @@
 import ListPosts from '@/components/profile/ListPosts.vue';
 </script>
 <template>
-    <ListPosts />
+    <div>
+        <ListPosts />
+
+    </div>
 </template>

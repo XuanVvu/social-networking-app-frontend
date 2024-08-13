@@ -100,9 +100,15 @@ const routes = [
         path: '',
         name: 'Settings',
         component: () => import('@/pages/Settings.vue')
+      },
+      {
+        path: 'information',
+        name: 'SettingsInformation',
+        component: () => import('@/pages/SettingsAccount.vue')
       }
     ]
   },
+
   {
     path: '/:pathMatch(.*)*',
     name: 'Page Not Found',

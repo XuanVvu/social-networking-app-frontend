@@ -4,13 +4,19 @@ const { itemPerLine } = defineProps<{ itemPerLine?: string }>()
 
 </script>
 <template>
-    <div :class="`grid gap-4 ${itemPerLine ? itemPerLine : 'grid-cols-6'}`">
+    <div class="flex gap-2 flex-wrap">
         <FriendBox :role-friend=0 />
         <FriendBox :role-friend=0 />
         <FriendBox :role-friend=0 />
         <FriendBox :role-friend=0 />
-
-
-
+        <FriendBox :role-friend=0 />
+        <FriendBox :role-friend=0 />
+        <FriendBox :role-friend=0 />
+        <FriendBox :role-friend=0 />
+        <FriendBox :role-friend=0 />
+        <FriendBox :role-friend=0 />
+        <FriendBox :role-friend=0 />
+        <FriendBox :role-friend=0 />
+        <FriendBox :role-friend=0 />
     </div>
 </template>

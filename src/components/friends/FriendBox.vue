@@ -4,7 +4,7 @@ const { roleFriend } = defineProps<{ roleFriend: number }>()
 </script>
 
 <template>
-    <div class="bg-white border p-5 rounded-lg flex flex-col items-center justify-center gap-4 ">
+    <div class="bg-white border p-5 rounded-lg flex flex-col items-center justify-center gap-4 w-[240px]">
         <img src="" alt="" class="w-[190px] h-[230px] bg-black">
         <div>User name</div>
         <div class="text-white font-semibold">
