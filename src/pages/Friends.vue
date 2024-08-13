@@ -23,7 +23,7 @@ const options = [
 </script>
 
 <template>
-    <div class="p-[60px] h-[100vh]">
+    <div class="p-[60px]" style="height: calc(100vh - 120px);">
         <div class="bg-white px-6 py-12 border mb-4 flex items-center justify-between">
             <h1 class="font-bold text-2xl">Bạn bè</h1>
             <el-select v-model="value" class="m-2 w-[200px]" placeholder="Select" size="large">
@@ -32,5 +32,6 @@ const options = [
         </div>
 
         <FriendList />
+        <!-- <el-empty description="Không có dữ liệu" />s -->
     </div>
 </template>

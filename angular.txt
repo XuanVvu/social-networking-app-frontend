@@ -1,0 +1,109 @@
+Angular
+
+Giới thiệu về angular
+    - Framework JavaScript mã nguồn mở phát triển bởi Google
+    - Dùng để xây dựng ứng dụng web động, single-page applications (SPAs)
+    - Sử dụng TypeScript làm ngôn ngữ chính
+    - Cung cấp cấu trúc và công cụ để phát triển ứng dụng web quy mô lớn
+-  Lịch sử phát triển:
+    - 2010: AngularJS (Angular 1.x) ra đời
+    - 2016: Angular 2 được phát hành, viết lại hoàn toàn
+    - 2016-nay: Cập nhật định kỳ với các phiên bản mới (Angular 4, 5, 6, ...)
+- So sánh với framework khác:
+    - React:
+        * Linh hoạt hơn, dễ học hơn
+        * Tập trung vào UI, cần thêm thư viện cho routing, state management
+    - Vue:
+        * Đơn giản, dễ tiếp cận
+        * Hiệu suất tốt, kích thước nhỏ
+    - Angular:
+        * Framework toàn diện, tích hợp nhiều công cụ
+        * Phù hợp cho dự án lớn, có cấu trúc chặt chẽ
+
+Tính năng của Angular
+- Module hoá
+    - Chia chức năng riêng biệt thành các module độc lập
+    - Mỗi module có thể chứa các module khác
+    - Lazy load: chỉ load khi module được sử dụng
+    - Ưu điểm: Cấu trúc rõ ràng, dễ quản lý. Tích hợp sẵn dependency injection
+    - Nhược điểm: Phức tạp, khó dùng
+
+- Dependency injection
+    - Là một design pattern được sử dụng để giảm sự phụ thuộc giữa các thành phần trong ứng dụng. 
+    Trong DI, các đối tượng không tạo ra các instance của dependency của nó và chỉ cần sử dụng nó mà không cần quan tâm đến cách mà nó được tạo ra, cách tạo ra là do thằng khác quản lý.
+    - Trong react:
+        - React không có hệ thống DI tích hợp sẵn, nhưng có thể áp dụng DI thông qua các pattern và thư viện.
+        -Cách tiếp cận:
+            - Sử dụng props để truyền dependencies.
+            - Context API để quản lý global state và dependencies.
+        - Ưu điểm:
+            - Linh hoạt, cho phép nhiều cách tiếp cận khác nhau.
+            - Không có overhead nếu không sử dụng DI.
+        - Nhược điểm:
+            - Cần thêm code boilerplate hoặc thư viện bên ngoài cho DI phức tạp.
+            - Có thể dẫn đến "prop drilling" nếu không được quản lý tốt.
+
+    - Vue cũng không có hệ thống DI tích hợp sẵn, nhưng cung cấp các cách để quản lý dependencies.
+        - Sử dụng props để truyền dependencies.
+        - Provide/inject API cho DI-like behavior.
+        - Vuex cho state management.
+
+        - Ưu điểm:
+
+            - Provide/inject API cung cấp cách tiếp cận DI đơn giản.
+            - Linh hoạt, cho phép nhiều cách quản lý dependencies.
+
+        - Nhược điểm:
+
+            - Không có hệ thống DI toàn diện như Angular.
+            - Có thể phức tạp khi quản lý nhiều dependencies.
+
+- Guard
+    - Là một cơ chế bảo vệ và kiểm soát truy cập đến các routes
+    - Ngăn chặn người dùng truy cập vào các trang không được phép
+    - Xác thực và ủy quyền người dùng
+    - Lazy load
+    - Ưu điểm:
+        - Cung cấp nhiều loại guard cho các tình huống khác nhau: CanActivate, CanActivateChild, CanDeactivate, và CanLoad.
+        - Tích hợp chặt chẽ với hệ thống routing của Angular.
+        - Có thể sử dụng dependency injection trong guards.
+    - Nhược điểm: Phức tạp, khó dùng
+    - So sánh với react
+        - eact không có tính năng guard tích hợp sẵn, nhưng có thể triển khai chức năng tương tự bằng cách sử dụng higher-order components (HOC) hoặc hooks với react-router.
+        - Ưu điểm hơn so với angular: Linh hoạt, có thể tùy chỉnh theo nhu cầu cụ thể.
+        - Nhược điểm :
+            - Không có giải pháp chuẩn, có thể dẫn đến sự không nhất quán giữa các dự án.
+            - Cần phải tự triển khai, có thể tốn thời gian hơn.
+    - So sánh với vuejs
+        - Vue Router cung cấp navigation guards tương tự như Angular, bao gồm beforeEach, beforeResolve, và afterEach.
+        - Ưu điểm:
+            - Tích hợp sẵn với Vue Router.
+            - Linh hoạt, có thể sử dụng cho nhiều mục đích khác nhau.
+        - Nhược điểm:
+            - Không phân biệt rõ các loại guard như Angular
+            - Có thể phức tạp khi xử lý các tình huống phức tạp: Tái sử dụng code khó khăn hơn, xử lý các direction phức tạp,...
+
+- Change detection
+    - Là cách thức angular phát hiện thay đổi dữ liệu và cập nhật lên View. Khi có các event như DOM events (mouse, key, …), Requests api, Timers (setTimeout(), setInterval()) … thì nó sẽ trigger và chạy phát hiện thay đổi để cập nhật DOM.
+    - Chức năng của nó tương tự như Virtual DOM trong react là cập nhật DOM, tuy nhiên nó là một cơ chế kiểm tra và cập nhật trực tiếp trên DOM, còn trong react thì Virtual DOM là một kỹ thuật tối ưu hóa việc cập nhật DOM bằng cách so sánh và áp dụng các thay đổi.
+    - Mỗi 1 view là một cây component, khi phát hiện thay đổi kích hoạt ở bất kỳ component nào, nó sẽ bắt đầu kích hoạt từ component gốc (AppComponent) để xem có cập nhật view hay không.(khi app bootstrap thì zonejs sẽ chịu trách nhiệm việc phát hiện thay đổi, nên khi có detect change thì nó sẽ trigger AppComponent).
+    - Trong react: 
+        - So sánh Virtual DOM mới với cái cũ để xác định các thay đổi.
+        - Sử dụng thuật toán diffing để tối ưu quá trình cập nhật.
+    - Trong vue 
+        - Theo dõi các dependencies của mỗi component.
+        - Chỉ cập nhật các components bị ảnh hưởng trực tiếp khi có thay đổi.
+
+
+- Lý do Angular thường được sử  dụng ở những dự án lớn:
+
++ Tính module hóa: Angular có hệ thống module mạnh mẽ, cho phép chia nhỏ ứng dụng thành các phần độc lập, dễ quản lý.
++ Dependency Injection: Tính năng này của Angular giúp quản lý dependencies hiệu quả, đặc biệt hữu ích trong các ứng dụng phức tạp.
++ Công cụ phát triển: Angular CLI cung cấp nhiều công cụ hỗ trợ phát triển, testing và deployment cho các dự án quy mô lớn.
++ Hỗ trợ enterprise: Angular được Google hỗ trợ, có nhiều tài liệu và resources cho các ứng dụng enterprise.
+
+
+-( Directive )
+- ( Pipe )
+- ( interceoptor )
+- ( Rxjs )
