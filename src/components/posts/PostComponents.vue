@@ -86,7 +86,7 @@ const deletePost = () => {
 }
 </script>
 <template>
-  <div class="border rounded-lg px-8 py-4 shadow-md bg-[#fff]">
+  <div class="border rounded-lg px-8 py-2 shadow-md bg-[#fff]">
     <div class="flex justify-between mb-4">
       <div class="flex items-center">
         <img class="w-10 h-10 rounded-full mr-4" alt="Profile Picture" />
@@ -116,10 +116,18 @@ const deletePost = () => {
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div class="flex text-gray-600 gap-6">
-      <button v-for="iconItem in iconList" class="flex items-center space-x-4 hover:text-gray-900 h-[25px]"
+    <div class="flex text-gray-600 gap-6 pb-5">
+      <button v-for="iconItem in iconList" class="flex items-center space-x-4 hover:text-gray-900 h-[20px]"
         @click="iconItem.onClick">
         <Icon :icon="iconItem.icon" />
+      </button>
+    </div>
+    <div class="border-t flex">
+      <input placeholder="Bình luận bài viết" class="w-full px-3 py-4" />
+      <button class="text-blue-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        </svg>
       </button>
     </div>
   </div>

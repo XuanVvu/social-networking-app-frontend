@@ -104,6 +104,18 @@ const routes = [
     ]
   },
   {
+    path: '/search',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'Search',
+        component: () => import('@/pages/SearchScreen.vue')
+      }
+    ]
+  },
+
+  {
     path: '/:pathMatch(.*)*',
     name: 'Page Not Found',
     component: () => import('@/pages/NotFound.vue')

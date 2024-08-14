@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import useNavigation from '@/composables/useNavigation';
 
 const route = useRoute()
+const roleFriend = ref(2)
 const { navigateTo } = useNavigation()
 const activeName = ref('')
 const handleClick = (tab: TabsPaneContext) => {
@@ -55,8 +56,26 @@ onMounted(() => {
         <span class="text-lg">2 bài viết </span>
       </div>
       <div class="font-bold text-xl">Về tôi</div>
-      <span class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit ab maiores repellat fuga
-        quasi facilis libero a? Fugit, fugiat ducimus.</span>
+      <div class="mb-5">
+        <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit ab maiores repellat fuga
+          quasi facilis libero a? Fugit, fugiat ducimus.</span>
+
+      </div>
+      <div class="text-white font-semibold">
+        <button class=" bg-blue-600 px-5 py-2 rounded-2xl" v-if="roleFriend === 0">
+          Kết bạn
+
+        </button>
+        <button class=" bg-slate-600 px-5 py-2 rounded-2xl" v-if="roleFriend === 1">
+          Chấp nhận
+
+        </button>
+        <button class=" bg-red-600 px-5 py-2 rounded-2xl" v-if="roleFriend === 2">
+          Gỡ kết bạn
+
+        </button>
+
+      </div>
     </div>
   </div>
   <el-tabs v-model="activeName" @tab-click="handleClick">
