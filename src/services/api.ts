@@ -12,6 +12,10 @@ class callApi {
     })
   }
 
+  setToken(token: string) {
+    this.api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  }
+
   async get(url: string, config = {}) {
     try {
       const response = await this.api.get(url, config)
@@ -53,7 +57,17 @@ class callApi {
   }
 
   setHeader(header: string, value: string) {
-    this.api.defaults.headers.common[header] = value
+    // this.api.defaults.headers.common[header] = value
+    axios.interceptors.request.use(
+      (config) => {
+        config.headers[header] = `Bearer ${value}`
+        return config
+      },
+
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
   }
 }
 

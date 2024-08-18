@@ -4,13 +4,17 @@ import UploadFile from '@/components/posts/UploadFile.vue'
 
 const isOpenDialogAddPost = ref<boolean>()
 const form = reactive({
-  description: '',
-  password: '',
-  rememberCheckbox: false
+  description: ''
 })
 
-const openDialog = () => {
+const isCreateMode = ref<boolean>(true)
+
+const openDialog = (data?: any) => {
   isOpenDialogAddPost.value = true
+  if (data) {
+    isCreateMode.value = false
+    form.description = data.content
+  }
 }
 
 const closeDialog = () => {
@@ -21,6 +25,7 @@ const handleConfirm = () => {
   // Xử lý logic khi confirm
   closeDialog()
 }
+
 defineExpose({
   isOpenDialogAddPost,
   openDialog,
@@ -30,7 +35,11 @@ defineExpose({
 </script>
 
 <template>
-  <el-dialog v-model="isOpenDialogAddPost" title="Tạo bài viêt" class="rounded-xl">
+  <el-dialog
+    v-model="isOpenDialogAddPost"
+    :title="`${isCreateMode ? 'Tạo' : 'Sửa'} bài viêt`"
+    class="rounded-xl"
+  >
     <el-form :model="form" class="flex flex-col gap-5">
       <el-input v-model="form.description" autocomplete="off" type="textarea" placeholder="Mô tả" />
       <UploadFile />
