@@ -7,7 +7,7 @@ export default function useNavigation() {
   }
 
   const logout = () => {
-    localStorage.removeItem('token')
+    localStorage.removeItem('currentUser')
     router.push('/login')
   }
 

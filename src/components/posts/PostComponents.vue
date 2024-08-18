@@ -4,17 +4,19 @@ import shareIcon from '@/assets/share.svg'
 import Icon from '@/components/base/Icon.vue'
 import commentIcon from '@/assets/comment-icon.svg'
 import { MoreFilled } from '@element-plus/icons-vue'
-import CreatePost from "@/components/posts/CreatePost.vue"
+import CreatePost from '@/components/posts/CreatePost.vue'
 import PostDetail from '@/components/posts/PostDetail.vue'
+import DateTime from '@/components/common/DateTime.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
+import callApi from '@/services/api'
+import { useProfileStore } from '@/store/profile'
 
 const openCommentPost = () => {
   postDetailRef?.value?.openPostDetail()
-
 }
 
+const { data } = defineProps<{ data: any }>()
 const iconList = [
   {
     icon: heart
@@ -28,61 +30,41 @@ const iconList = [
   }
 ]
 
-const listPostImage = [
-  {
-    id: 1,
-    url: 'https://cdn.pixabay.com/photo/2014/06/03/19/38/board-361516_640.jpg'
-  },
-  {
-    id: 2,
-    url: 'https://img.freepik.com/free-vector/work-team-checking-giant-check-list-background_23-2148084919.jpg?w=826&t=st=1723005252~exp=1723005852~hmac=21f5e72badf9c4ee327e31231d4b21507933b6624a2089898d9cdaed65b5f296'
-  },
-  {
-    id: 3,
-    url: 'https://mayvers.com.au/wp-content/uploads/2017/09/test-image.jpg'
-  },
-  {
-    id: 4,
-    url: 'https://cdn.pixabay.com/photo/2014/06/03/19/38/board-361516_640.jpg'
-  },
-
-]
-
-const dialogValue = ref<boolean>(false)
 const createPostRef = ref()
 const postDetailRef = ref()
 
+const currentUser = localStorage.getItem('currentUser')
+const emit = defineEmits(['post-deleted'])
 const openEditScreen = () => {
-  createPostRef?.value?.openDialog()
+  createPostRef?.value?.openDialog(data)
 }
 
 const deletePost = () => {
-  dialogValue.value = true
-
-  ElMessageBox.confirm(
-    'Bạn có chắc chắn muốn xóa bài viết này không?',
-    'Xóa bài viêt',
-    {
-      confirmButtonText: 'Xóa',
-      cancelButtonText: 'Hủy',
-      type: 'error',
-      dangerouslyUseHTMLString: true,
-      customClass: 'delete-dialog'
-    }
-  )
-    .then(() => {
+  ElMessageBox.confirm('Bạn có chắc chắn muốn xóa bài viết này không?', 'Xóa bài viêt', {
+    confirmButtonText: 'Xóa',
+    cancelButtonText: 'Hủy',
+    type: 'error',
+    customClass: 'delete-dialog'
+  })
+    .then(async () => {
+      emit('post-deleted', data.id)
       ElMessage({
         type: 'success',
-        message: 'Bài viết đã được xóa thành công.',
+        message: 'Bài viết đã được xóa thành công.'
       })
     })
     .catch(() => {
       ElMessage({
         type: 'info',
-        message: 'Đã xảy ra lỗi khi xóa bài viết. Vui lòng thử lại.',
+        message: 'Đã xảy ra lỗi khi xóa bài viết. Vui lòng thử lại.'
       })
     })
+}
 
+const isHideSettingsPost = () => {
+  console.log(data)
+
+  return data.user?.id !== JSON.parse(currentUser as any).id
 }
 </script>
 <template>
@@ -91,48 +73,69 @@ const deletePost = () => {
       <div class="flex items-center">
         <img class="w-10 h-10 rounded-full mr-4" alt="Profile Picture" />
         <div>
-          <div class="font-bold">{{ 'userName' }}</div>
-          <div class="text-sm text-gray-500">{{ 'postTime' }}</div>
+          <div class="font-bold">{{ data.user?.firstName + ' ' + data.user?.lastName }}</div>
+          <div class="text-sm text-gray-500">
+            <DateTime :time="data.createdAt" />
+          </div>
         </div>
-
       </div>
-      <el-dropdown class="" trigger="click">
+      <el-dropdown class="" trigger="click" :hidden="isHideSettingsPost()">
         <MoreFilled class="w-[20px] cursor-pointer outline-none" />
         <template #dropdown>
           <el-dropdown-menu class="w-[200px] flex items-center">
-            <el-dropdown-item class="w-full" @click="openEditScreen">Edit</el-dropdown-item>
+            <el-dropdown-item class="w-full" @click="openEditScreen()">Edit</el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu class="w-[200px] flex items-center">
-            <el-dropdown-item class="w-full text-red-500" @click="deletePost">Delete</el-dropdown-item>
+            <el-dropdown-item class="w-full text-red-500" @click="deletePost"
+              >Delete</el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
     </div>
     <div class="mb-8">
-      <p class="mb-4">{{ 'postText' }}</p>
-      <el-carousel trigger="click" :autoplay="false" class="w-[680px] h-[680px]">
-        <el-carousel-item v-for="item in listPostImage" :key="item.id">
-          <img class="rounded-sm w-full h-full object-cover" :src="item.url" alt="Post Image" />
-        </el-carousel-item>
-      </el-carousel>
+      <p class="mb-4">{{ data.content }}</p>
+      <div v-if="data.photos">
+        <el-carousel trigger="click" :autoplay="false" class="w-[680px] h-[680px]">
+          <el-carousel-item v-for="item in data.photos" :key="item.id">
+            <img
+              class="rounded-sm w-full h-full object-cover"
+              :src="`http://localhost:3000${item.url}`"
+              alt="Post Image"
+            />
+          </el-carousel-item>
+        </el-carousel>
+      </div>
     </div>
-    <div class="flex text-gray-600 gap-6 pb-5">
-      <button v-for="iconItem in iconList" class="flex items-center space-x-4 hover:text-gray-900 h-[20px]"
-        @click="iconItem.onClick">
+    <div class="flex text-gray-600 gap-6 mb-3">
+      <button
+        v-for="iconItem in iconList"
+        @click="iconItem.onClick"
+        class="flex items-center space-x-4 hover:text-gray-900 h-[25px]"
+      >
         <Icon :icon="iconItem.icon" />
       </button>
     </div>
     <div class="border-t flex">
       <input placeholder="Bình luận bài viết" class="w-full px-3 py-4" />
       <button class="text-blue-500">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+          />
         </svg>
       </button>
     </div>
   </div>
-
-  <!-- <DialogConfirm v-model="dialogValue" /> -->
   <CreatePost ref="createPostRef" />
   <PostDetail ref="postDetailRef" />
 </template>
@@ -143,7 +146,7 @@ const deletePost = () => {
 }
 
 .delete-dialog .el-message-box__btns .el-button--primary {
-  background-color: #F56C6C;
-  border: #F56C6C;
+  background-color: #f56c6c;
+  border: #f56c6c;
 }
 </style>
