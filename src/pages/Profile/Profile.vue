@@ -1,12 +1,17 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { TabsPaneContext } from 'element-plus/es/components/tabs/src/constants'
 import { useRoute } from 'vue-router'
-import useNavigation from '@/composables/useNavigation';
+import useNavigation from '@/composables/useNavigation'
+import { useProfileStore } from '@/store/profile'
 
 const route = useRoute()
 const { navigateTo } = useNavigation()
 const activeName = ref('')
+
+const profileStore = useProfileStore()
+const isDataReady = ref(false)
+
 const handleClick = (tab: TabsPaneContext) => {
   switch (tab.props.name) {
     case 'first':
@@ -26,22 +31,26 @@ const handleClick = (tab: TabsPaneContext) => {
   }
 }
 
-onMounted(() => {
+const updateActiveTab = () => {
   switch (route.name) {
     case 'Posts':
       activeName.value = 'first'
-      break;
+      break
     case 'Images':
       activeName.value = 'second'
-      break;
+      break
     case 'ProfileFriends':
       activeName.value = 'third'
-      break;
+      break
   }
+}
+
+watch(() => route.name, updateActiveTab, { immediate: true })
+
+onMounted(async () => {
+  await profileStore.fetchPosts()
+  isDataReady.value = true
 })
-
-
-
 </script>
 <template>
   <div class="flex bg-white justify-center gap-[100px] py-[30px]">
@@ -55,27 +64,26 @@ onMounted(() => {
         <span class="text-lg">2 bài viết </span>
       </div>
       <div class="font-bold text-xl">Về tôi</div>
-      <span class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit ab maiores repellat fuga
-        quasi facilis libero a? Fugit, fugiat ducimus.</span>
+      <span class=""
+        >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit ab maiores repellat fuga
+        quasi facilis libero a? Fugit, fugiat ducimus.</span
+      >
     </div>
   </div>
-  <el-tabs v-model="activeName" @tab-click="handleClick">
+  <el-tabs v-model="activeName" @tab-click="handleClick" v-if="isDataReady">
     <el-tab-pane label="Bài viết" name="first">
       <router-view></router-view>
     </el-tab-pane>
     <el-tab-pane label="Ảnh" name="second">
       <div class="w-[1000px]">
-
         <router-view></router-view>
       </div>
     </el-tab-pane>
     <el-tab-pane label="Bạn bè" name="third">
       <div class="w-[1000px]">
         <router-view></router-view>
-
       </div>
     </el-tab-pane>
-
   </el-tabs>
 </template>
 

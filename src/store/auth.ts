@@ -1,6 +1,5 @@
 import callApi from '@/services/api'
 import { defineStore } from 'pinia'
-import axios from 'axios'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({ user: null, accessToken: null }),
@@ -12,15 +11,15 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(email: string, password: string) {
       try {
-        console.log(2)
-
-        // const response = await callApi.post('/users/login', { email, password })
-        // console.log(response)
-
-        // const token = response.data.data.access_token
-        // callApi.setHeader('Authorizaion', `Bearer ${token}`)
-        // this.setAuthData(response.data)
-        // return response
+        const response = await callApi.post('/users/login', { email, password })
+        if (response.data.success) {
+          const token = response.data.data.access_token
+          callApi.setToken(token)
+          // this.setAuthData(response.data)
+          await this.fetchUserInfo()
+          localStorage.setItem('currentUser', JSON.stringify(this.user))
+        }
+        return response
       } catch (error) {
         console.error('Login failed', error)
         throw error
@@ -34,8 +33,8 @@ export const useAuthStore = defineStore('auth', {
 
     async fetchUserInfo() {
       try {
-        const response = await axios.get('/api/user')
-        this.user = response.data
+        const response = await callApi.get('/users/current-user')
+        this.user = response
       } catch (error) {
         console.error('Failed to fetch user info', error)
         this.clearAuthData()

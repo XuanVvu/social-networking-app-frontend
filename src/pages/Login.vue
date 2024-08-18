@@ -7,7 +7,6 @@ import logo from "@/assets/logo.png"
 import InputBase from '@/components/base/InputBase.vue'
 import Button from '@/components/base/Button.vue'
 import useNavigation from "@/composables/useNavigation"
-import callApi from '@/services/api'
 import { useAuthStore } from '@/store/auth'
 
 export interface RuleForm {
@@ -37,19 +36,13 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
     if (!valid) {
       return;
     }
-    // const response = await callApi.post<RuleForm>('/users/login', {email: user.email || '', password: user.password || ''})
     const response = await authStore.login(user.email || '', user.password || '');
-    console.log(response);
-
-
+    
     if (!response.data.success) {
       loginErrorData.value = response.data
       isOpenDialogErrorLogin.value = true
       return
     }
-    const token = response.data.data.access_token
-    localStorage.setItem('token', token)
-    callApi.setHeader('Authorization', `Bearer ${token}`)
     navigateTo('/')
   })
 }
