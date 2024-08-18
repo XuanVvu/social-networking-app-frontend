@@ -107,7 +107,7 @@ const isHideSettingsPost = () => {
         </el-carousel>
       </div>
     </div>
-    <div class="flex text-gray-600 gap-6">
+    <div class="flex text-gray-600 gap-6 mb-3">
       <button
         v-for="iconItem in iconList"
         @click="iconItem.onClick"
