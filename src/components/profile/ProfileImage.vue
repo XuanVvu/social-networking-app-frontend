@@ -11,6 +11,6 @@ const { data } = defineProps<{ data: any }>()
         <ImageBox :url="item.url" />
       </div>
     </div>
-    <el-empty description="Không có dữ liệu" />
+    <el-empty v-if="!data" description="Không có dữ liệu" />
   </div>
 </template>

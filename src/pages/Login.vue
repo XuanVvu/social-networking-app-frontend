@@ -8,6 +8,7 @@ import InputBase from '@/components/base/InputBase.vue'
 import Button from '@/components/base/Button.vue'
 import useNavigation from "@/composables/useNavigation"
 import { useAuthStore } from '@/store/auth'
+import { storeToRefs } from 'pinia'
 
 export interface RuleForm {
   email: string
@@ -26,25 +27,36 @@ const loginErrorData = ref<{ message: string; success: boolean }>()
 const isOpenDialogErrorLogin = ref<boolean>()
 const { navigateTo } = useNavigation()
 const authStore = useAuthStore()
+const { user, accessToken } = storeToRefs(authStore)
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
-  const user = toRaw(form)
-  if (!formEl) {
-    return
-  }
-  await formEl.validate(async (valid) => {
-    if (!valid) {
+  if (!formEl) return;
+
+  try {
+    const valid = await formEl.validate()
+    if (!valid) return;
+
+    const user = toRaw(form);
+
+    if (typeof authStore.login !== 'function') {
+      console.error('authStore.login is not a function');
       return;
     }
+
     const response = await authStore.login(user.email || '', user.password || '');
     
-    if (!response.data.success) {
-      loginErrorData.value = response.data
-      isOpenDialogErrorLogin.value = true
-      return
+    if (!response.data?.success) {
+      loginErrorData.value = response.data;
+      isOpenDialogErrorLogin.value = true;
+      return;
     }
-    navigateTo('/')
-  })
+
+    navigateTo('/');
+  } catch (error) {
+    console.error('Login error:', error);
+    loginErrorData.value = { message: 'Đã xảy ra lỗi khi đăng nhập', success: false };
+    isOpenDialogErrorLogin.value = true;
+  }
 }
 const rules = reactive<FormRules<RuleForm>>({
   email: [

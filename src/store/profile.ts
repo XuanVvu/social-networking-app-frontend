@@ -8,22 +8,29 @@ export const useProfileStore = defineStore('auth', {
     getPhotos: (state) => state.photos
   },
   actions: {
-    async fetchPosts() {
+    async fetchPosts(userId: number) {
       const currentUser = localStorage.getItem('currentUser')
       const currentUserId = JSON.parse(currentUser as string).id
-      const posts = await callApi.get(`/post/postbyUserId/${currentUserId}`)
+      const posts = await callApi.get(`/post/postbyUserId/${userId}`)
       this.posts = posts
-      posts.forEach((item: any) => {
-        item.photos.forEach((element: any) => {
-          this.photos.push(element)
-        })
-      })
+      this.updatePhotos()
     },
 
-    async deletePost(postId: number) {
+    updatePhotos() {
+      this.photos = this.posts.flatMap((post: { photos: any[]; id: any }) =>
+        post.photos.map((photo) => ({
+          ...photo,
+          postId: post.id
+        }))
+      )
+    },
+
+    async deletePost(postId: number, userId: number) {
       try {
         await callApi.delete(`post/delete/${postId}`)
-        this.fetchPosts()
+        this.fetchPosts(userId)
+        this.posts = this.posts.filter((post: { id: number }) => post.id !== postId)
+        this.updatePhotos()
       } catch (e) {
         console.error('Error deleting post:', e)
       }
