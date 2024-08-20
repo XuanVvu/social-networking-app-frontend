@@ -6,10 +6,14 @@ export default function useNavigation() {
     router.push(path)
   }
 
+  const navigationId = (name: string, id: number) => {
+    router.push({ name: name, params: { id: id } })
+  }
+
   const logout = () => {
     localStorage.removeItem('currentUser')
     router.push('/login')
   }
 
-  return { navigateTo, logout }
+  return { navigateTo, navigationId, logout }
 }
