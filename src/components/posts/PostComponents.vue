@@ -9,8 +9,8 @@ import PostDetail from '@/components/posts/PostDetail.vue'
 import DateTime from '@/components/common/DateTime.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import callApi from '@/services/api'
-import { useProfileStore } from '@/store/profile'
+import { UserFilled } from '@element-plus/icons-vue'
+import useNavigation from '@/composables/useNavigation'
 
 const openCommentPost = () => {
   postDetailRef?.value?.openPostDetail()
@@ -32,6 +32,7 @@ const iconList = [
 
 const createPostRef = ref()
 const postDetailRef = ref()
+const { navigationId } = useNavigation()
 
 const currentUser = localStorage.getItem('currentUser')
 const emit = defineEmits(['post-deleted'])
@@ -47,7 +48,7 @@ const deletePost = () => {
     customClass: 'delete-dialog'
   })
     .then(async () => {
-      emit('post-deleted', data.id)
+      emit('post-deleted', data.id, data.user.id)
       ElMessage({
         type: 'success',
         message: 'Bài viết đã được xóa thành công.'
@@ -62,18 +63,31 @@ const deletePost = () => {
 }
 
 const isHideSettingsPost = () => {
-  console.log(data)
-
   return data.user?.id !== JSON.parse(currentUser as any).id
+}
+
+const handleClickUser = () => {
+  navigationId('Posts', data.user.id)
 }
 </script>
 <template>
   <div class="border rounded-lg px-8 py-2 shadow-md bg-[#fff]">
     <div class="flex justify-between mb-4">
       <div class="flex items-center">
-        <img class="w-10 h-10 rounded-full mr-4" alt="Profile Picture" />
+        <div class="mr-4 flex items-center cursor-pointer" @click="handleClickUser">
+          <img
+            class="w-10 h-10 rounded-full mr-4"
+            alt="Profile Picture"
+            :src="data.user?.avatar"
+            v-if="data.user?.avatar"
+          />
+
+          <el-avatar v-else :icon="UserFilled"> </el-avatar>
+        </div>
         <div>
-          <div class="font-bold">{{ data.user?.firstName + ' ' + data.user?.lastName }}</div>
+          <div class="font-bold cursor-pointer" @click="handleClickUser">
+            {{ data.user?.firstName + ' ' + data.user?.lastName }}
+          </div>
           <div class="text-sm text-gray-500">
             <DateTime :time="data.createdAt" />
           </div>

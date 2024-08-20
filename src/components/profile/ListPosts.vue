@@ -4,13 +4,15 @@ import { useProfileStore } from '@/store/profile'
 import { computed } from 'vue'
 const profileStore = useProfileStore()
 
-const onPostDeleted = (postId: number) => {
-  profileStore.deletePost(postId)
+const onPostDeleted = (postId: number, userId: number) => {
+  profileStore.deletePost(postId, userId)
 }
-const posts = computed(() => profileStore.getPosts)
+const posts = computed(() => {
+  return profileStore.getPosts
+})
 </script>
 <template>
-  <div class="my-5" v-for="item of posts" :key="item.id">
+  <div class="my-5" v-for="item of posts">
     <PostComponents :data="item" @post-deleted="onPostDeleted" />
   </div>
 </template>

@@ -8,9 +8,7 @@ const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 const disabled = ref(false)
 
-const handleRemove = (file: UploadFile) => {
-  console.log(file)
-}
+const handleRemove = (file: UploadFile) => {}
 
 const handlePictureCardPreview = (file: UploadFile) => {
   dialogImageUrl.value = file.url!

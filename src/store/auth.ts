@@ -15,7 +15,6 @@ export const useAuthStore = defineStore('auth', {
         if (response.data.success) {
           const token = response.data.data.access_token
           callApi.setToken(token)
-          // this.setAuthData(response.data)
           await this.fetchUserInfo()
           localStorage.setItem('currentUser', JSON.stringify(this.user))
         }
