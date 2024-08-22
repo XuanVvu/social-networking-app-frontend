@@ -14,7 +14,11 @@ export const useAuthStore = defineStore('auth', {
         const response = await callApi.post('/users/login', { email, password })
         if (response.data.success) {
           const token = response.data.data.access_token
-          callApi.setToken(token)
+          if (token) {
+            callApi.setToken(token)
+            localStorage.setItem('accessToken', token)
+          }
+
           await this.fetchUserInfo()
           localStorage.setItem('currentUser', JSON.stringify(this.user))
         }
@@ -25,9 +29,8 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    setAuthData(data: any) {
-      this.accessToken = data.access_token
-      localStorage.setItem('accessToken', data.accessToken)
+    setAuthData(accessToken: any) {
+      localStorage.setItem('accessToken', accessToken)
     },
 
     async fetchUserInfo() {

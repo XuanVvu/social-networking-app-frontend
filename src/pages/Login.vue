@@ -8,7 +8,6 @@ import InputBase from '@/components/base/InputBase.vue'
 import Button from '@/components/base/Button.vue'
 import useNavigation from "@/composables/useNavigation"
 import { useAuthStore } from '@/store/auth'
-import { storeToRefs } from 'pinia'
 
 export interface RuleForm {
   email: string
@@ -27,7 +26,6 @@ const loginErrorData = ref<{ message: string; success: boolean }>()
 const isOpenDialogErrorLogin = ref<boolean>()
 const { navigateTo } = useNavigation()
 const authStore = useAuthStore()
-const { user, accessToken } = storeToRefs(authStore)
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;

@@ -1,7 +1,7 @@
 import callApi from '@/services/api'
 import { defineStore } from 'pinia'
 
-export const useProfileStore = defineStore('auth', {
+export const useProfileStore = defineStore('profile', {
   state: () => ({ posts: null as any, photos: [] as any }),
   getters: {
     getPosts: (state) => state.posts,
@@ -9,8 +9,6 @@ export const useProfileStore = defineStore('auth', {
   },
   actions: {
     async fetchPosts(userId: number) {
-      const currentUser = localStorage.getItem('currentUser')
-      const currentUserId = JSON.parse(currentUser as string).id
       const posts = await callApi.get(`/post/postbyUserId/${userId}`)
       this.posts = posts
       this.updatePhotos()

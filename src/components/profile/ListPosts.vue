@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import PostComponents from '@/components/posts/PostComponents.vue'
 import { useProfileStore } from '@/store/profile'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import callApi from '@/services/api'
 const profileStore = useProfileStore()
+
+const listPostLiked = ref()
 
 const onPostDeleted = (postId: number, userId: number) => {
   profileStore.deletePost(postId, userId)
@@ -10,9 +13,23 @@ const onPostDeleted = (postId: number, userId: number) => {
 const posts = computed(() => {
   return profileStore.getPosts
 })
+
+const fetchLikeStatus = async () => {
+  const response = await callApi.get(`/post-like/liked-posts`)
+  listPostLiked.value = response
+}
+
+onMounted(() => {
+  fetchLikeStatus()
+})
 </script>
 <template>
-  <div class="my-5" v-for="item of posts">
-    <PostComponents :data="item" @post-deleted="onPostDeleted" />
+  <div class="my-5" v-for="item of posts" :key="item.id">
+    <PostComponents
+      :data="item"
+      @post-deleted="onPostDeleted"
+      v-if="listPostLiked"
+      :listPostLiked="listPostLiked"
+    />
   </div>
 </template>
