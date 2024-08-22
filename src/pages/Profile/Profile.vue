@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, watchEffect } from 'vue'
 import { TabsPaneContext } from 'element-plus/es/components/tabs/src/constants'
 import { useRoute } from 'vue-router'
 import useNavigation from '@/composables/useNavigation'
 import { useProfileStore } from '@/store/profile'
 import { UserFilled } from '@element-plus/icons-vue'
+import callApi from '@/services/api'
 
 const route = useRoute()
 const roleFriend = ref(2)
@@ -15,7 +16,7 @@ const profileStore = useProfileStore()
 const isDataReady = ref(false)
 const currentUser = localStorage.getItem('currentUser')
 const currentUserData = JSON.parse(currentUser as any)
-const currentUserAvt = JSON.parse(currentUser as any).avatar
+const user = ref()
 
 const handleClick = (tab: TabsPaneContext) => {
   switch (tab.props.name) {
@@ -54,26 +55,27 @@ const updateActiveTab = () => {
 
 watch(() => route.name, updateActiveTab, { immediate: true })
 
-onMounted(async () => {
-  if (profileStore) {
-    await profileStore.fetchPosts(Number(route.params.id))
-  }
+watchEffect(async () => {
+  await profileStore.fetchPosts(Number(route.params.id))
+  const userData = await callApi.get(`/users/${route.params.id}`)
+  user.value = userData
+})
 
+onMounted(async () => {
+  await profileStore.fetchPosts(Number(route.params.id))
   isDataReady.value = true
 })
 </script>
 <template>
   <div class="flex bg-white justify-center gap-[100px] py-[30px]">
-    <div class="w-[200px] h-[200px] rounded-full" v-if="currentUserAvt">
-      <img :src="currentUserAvt" alt="" />
+    <div class="w-[200px] h-[200px] rounded-full" v-if="user?.avatar">
+      <img :src="user?.avatar" alt="" />
     </div>
     <el-avatar v-else :icon="UserFilled" class="w-[200px] h-[200px]"></el-avatar>
 
     <div class="max-w-[30%]">
       <div class="flex justify-between pb-5">
-        <h3 class="font-bold text-xl">
-          {{ currentUserData.firstName }} {{ currentUserData.lastName }}
-        </h3>
+        <h3 class="font-bold text-xl">{{ user?.firstName }} {{ user?.lastName }}</h3>
         <span class="text-lg">2 bài viết </span>
       </div>
       <div class="font-bold text-xl">Về tôi</div>

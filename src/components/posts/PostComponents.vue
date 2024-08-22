@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import redHeart from '@/assets/red-heart.svg'
 import heart from '@/assets/heart.svg'
 import shareIcon from '@/assets/share.svg'
 import Icon from '@/components/base/Icon.vue'
@@ -7,37 +8,73 @@ import { MoreFilled } from '@element-plus/icons-vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
 import PostDetail from '@/components/posts/PostDetail.vue'
 import DateTime from '@/components/common/DateTime.vue'
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { UserFilled } from '@element-plus/icons-vue'
 import useNavigation from '@/composables/useNavigation'
+import callApi from '@/services/api'
 
-const openCommentPost = () => {
-  postDetailRef?.value?.openPostDetail()
-}
-
-const { data } = defineProps<{ data: any }>()
-const iconList = [
+const { data, listPostLiked } = defineProps<{ data: any; listPostLiked: any }>()
+const postData = ref()
+const likedCountData = ref(0)
+const commentData = ref()
+const iconList = ref([
   {
-    icon: heart
+    icon: heart,
+    onClick: () => toggleLike(),
+    countData: 0,
+    text: 'lượt thích'
   },
   {
     icon: commentIcon,
-    onClick: openCommentPost
+    onClick: () => openCommentPost(),
+    countData: 0,
+    text: 'bình luận'
   },
   {
-    icon: shareIcon
+    icon: shareIcon,
+    countData: 0,
+    text: 'lượt chia sẻ'
   }
-]
+])
+
+const toggleLike = async () => {
+  like.value = !like.value
+  iconList.value[0].icon = like.value ? redHeart : heart
+  await updateLikeStatusOnServer(like.value)
+}
+
+const updateLikeStatusOnServer = async (isLiked: boolean) => {
+  try {
+    await callApi.post(`/post-like/${data.id}/like`, { liked: isLiked })
+  } catch (error) {
+    console.error('Lỗi khi cập nhật trạng thái yêu thích:', error)
+  }
+  likedCount()
+}
+
+const openCommentPost = async () => {
+  fetchComment()
+  postDetailRef?.value?.openPostDetail(commentData.value)
+}
+
+const fetchComment = async () => {
+  const comments = await callApi.get(`/comments/post/${data.id}`)
+  commentData.value = comments
+  iconList.value[1].countData = comments.length
+}
 
 const createPostRef = ref()
 const postDetailRef = ref()
+const like = ref(false)
 const { navigationId } = useNavigation()
 
 const currentUser = localStorage.getItem('currentUser')
 const emit = defineEmits(['post-deleted'])
-const openEditScreen = () => {
-  createPostRef?.value?.openDialog(data)
+
+const openEditScreen = async () => {
+  postData.value = await callApi.get(`/post/${data.id}`)
+  createPostRef?.value?.openDialog(postData.value)
 }
 
 const deletePost = () => {
@@ -61,14 +98,29 @@ const deletePost = () => {
       })
     })
 }
-
-const isHideSettingsPost = () => {
+const isHideSettingsPost = computed(() => {
   return data.user?.id !== JSON.parse(currentUser as any).id
-}
+})
 
 const handleClickUser = () => {
   navigationId('Posts', data.user.id)
 }
+
+const likedCount = async () => {
+  const count = await callApi.get(`/post-like/${data.id}/count`)
+  likedCountData.value = count
+  iconList.value[0].countData = count
+}
+
+onMounted(async () => {
+  if (listPostLiked) {
+    like.value = listPostLiked.some((item: any) => item.id === data.id)
+    iconList.value[0].icon = like.value ? redHeart : heart
+  }
+  likedCount()
+  fetchComment()
+  console.log(commentData.value)
+})
 </script>
 <template>
   <div class="border rounded-lg px-8 py-2 shadow-md bg-[#fff]">
@@ -93,7 +145,7 @@ const handleClickUser = () => {
           </div>
         </div>
       </div>
-      <el-dropdown class="" trigger="click" :hidden="isHideSettingsPost()">
+      <el-dropdown class="" trigger="click" :hidden="isHideSettingsPost">
         <MoreFilled class="w-[20px] cursor-pointer outline-none" />
         <template #dropdown>
           <el-dropdown-menu class="w-[200px] flex items-center">
@@ -122,13 +174,15 @@ const handleClickUser = () => {
       </div>
     </div>
     <div class="flex text-gray-600 gap-6 mb-3">
-      <button
-        v-for="iconItem in iconList"
-        @click="iconItem.onClick"
-        class="flex items-center space-x-4 hover:text-gray-900 h-[25px]"
-      >
-        <Icon :icon="iconItem.icon" />
-      </button>
+      <div class="flex gap-2" v-for="(iconItem, index) in iconList" :key="index">
+        <button
+          @click="iconItem.onClick"
+          class="flex items-center space-x-4 hover:text-gray-900 h-[25px]"
+        >
+          <Icon :icon="iconItem.icon" />
+        </button>
+        <p>{{ iconItem.countData + ' ' + iconItem.text }}</p>
+      </div>
     </div>
     <div class="border-t flex">
       <input placeholder="Bình luận bài viết" class="w-full px-3 py-4" />
@@ -151,7 +205,7 @@ const handleClickUser = () => {
     </div>
   </div>
   <CreatePost ref="createPostRef" />
-  <PostDetail ref="postDetailRef" />
+  <PostDetail ref="postDetailRef" :data="data" />
 </template>
 
 <style>

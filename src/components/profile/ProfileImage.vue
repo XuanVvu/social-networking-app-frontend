@@ -5,7 +5,7 @@ const { data } = defineProps<{ data: any }>()
 </script>
 
 <template>
-  <div style="height: calc(100vh - 395px)">
+  <div style="min-height: calc(100vh - 395px)">
     <div class="grid grid-cols-3 gap-2">
       <div v-for="item of data">
         <ImageBox :url="item.url" />
