@@ -13,11 +13,14 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { UserFilled } from '@element-plus/icons-vue'
 import useNavigation from '@/composables/useNavigation'
 import callApi from '@/services/api'
+import { usePostStore } from '@/store/post'
 
 const { data, listPostLiked } = defineProps<{ data: any; listPostLiked: any }>()
+const postStore = usePostStore()
 const postData = ref()
 const likedCountData = ref(0)
 const commentData = ref()
+const isSaved = ref()
 const iconList = ref([
   {
     icon: heart,
@@ -61,6 +64,7 @@ const openCommentPost = async () => {
 const fetchComment = async () => {
   const comments = await callApi.get(`/comments/post/${data.id}`)
   commentData.value = comments
+  postStore.setComments(comments)
   iconList.value[1].countData = comments.length
 }
 
@@ -70,7 +74,7 @@ const like = ref(false)
 const { navigationId } = useNavigation()
 
 const currentUser = localStorage.getItem('currentUser')
-const emit = defineEmits(['post-deleted'])
+const emit = defineEmits(['post-deleted', 'remove-savedpost'])
 
 const openEditScreen = async () => {
   postData.value = await callApi.get(`/post/${data.id}`)
@@ -112,6 +116,20 @@ const likedCount = async () => {
   iconList.value[0].countData = count
 }
 
+const onSavePost = async () => {
+  await callApi.post(`/saved-post/${data.id}`, {})
+  fetchSavedPost()
+}
+
+const removeSavePost = () => {
+  emit('remove-savedpost', data.id)
+}
+
+const fetchSavedPost = async () => {
+  const savedPosts = await callApi.get('/saved-post')
+  isSaved.value = savedPosts.some((item: any) => item.post.id === data.id)
+}
+
 onMounted(async () => {
   if (listPostLiked) {
     like.value = listPostLiked.some((item: any) => item.id === data.id)
@@ -119,7 +137,7 @@ onMounted(async () => {
   }
   likedCount()
   fetchComment()
-  console.log(commentData.value)
+  fetchSavedPost()
 })
 </script>
 <template>
@@ -145,15 +163,28 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      <el-dropdown class="" trigger="click" :hidden="isHideSettingsPost">
+      <el-dropdown class="" trigger="click">
         <MoreFilled class="w-[20px] cursor-pointer outline-none" />
         <template #dropdown>
           <el-dropdown-menu class="w-[200px] flex items-center">
-            <el-dropdown-item class="w-full" @click="openEditScreen()">Edit</el-dropdown-item>
+            <el-dropdown-item class="w-full" v-if="!isSaved" @click="onSavePost"
+              >Lưu bài viết</el-dropdown-item
+            >
+            <el-dropdown-item class="w-full" @click="removeSavePost" v-else
+              >Bỏ lưu</el-dropdown-item
+            >
           </el-dropdown-menu>
           <el-dropdown-menu class="w-[200px] flex items-center">
-            <el-dropdown-item class="w-full text-red-500" @click="deletePost"
-              >Delete</el-dropdown-item
+            <el-dropdown-item class="w-full" @click="openEditScreen()" :hidden="isHideSettingsPost"
+              >Sửa bài viết</el-dropdown-item
+            >
+          </el-dropdown-menu>
+          <el-dropdown-menu class="w-[200px] flex items-center">
+            <el-dropdown-item
+              class="w-full text-red-500"
+              @click="deletePost"
+              :hidden="isHideSettingsPost"
+              >Xoá bài viêt</el-dropdown-item
             >
           </el-dropdown-menu>
         </template>
@@ -205,7 +236,7 @@ onMounted(async () => {
     </div>
   </div>
   <CreatePost ref="createPostRef" />
-  <PostDetail ref="postDetailRef" :data="data" />
+  <PostDetail ref="postDetailRef" :data="data" @fetchCommentsData="fetchComment" />
 </template>
 
 <style>

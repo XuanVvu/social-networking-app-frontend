@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import PostComponents from '@/components/posts/PostComponents.vue'
-import ListPosts from '@/components/profile/ListPosts.vue'
 import FriendSuggestions from '@/components/friends/FriendSuggestions.vue'
 import callApi from '@/services/api'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const postsData = ref()
+const listPostLiked = ref()
 
 const onPostDeleted = async (postId: any) => {
   await callApi.delete(`post/delete/${postId}`)
@@ -17,8 +17,14 @@ const getAllPosts = async () => {
   postsData.value = posts
 }
 
+const fetchLikeStatus = async () => {
+  const response = await callApi.get(`/post-like/liked-posts`)
+  listPostLiked.value = response
+}
+
 onMounted(async () => {
   getAllPosts()
+  fetchLikeStatus()
 })
 </script>
 
@@ -27,7 +33,12 @@ onMounted(async () => {
     <div class="flex w-[1050px] mx-auto gap-7">
       <div>
         <div class="my-5" v-for="postItem of postsData" :key="postItem.id">
-          <PostComponents :data="postItem" @post-deleted="onPostDeleted" />
+          <PostComponents
+            v-if="listPostLiked"
+            :listPostLiked="listPostLiked"
+            :data="postItem"
+            @post-deleted="onPostDeleted"
+          />
         </div>
       </div>
       <FriendSuggestions />

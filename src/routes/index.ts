@@ -33,6 +33,17 @@ const routes = [
     ]
   },
   {
+    path: '/saved-post',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'SavedPost',
+        component: () => import('@/pages/SavedPost.vue')
+      }
+    ]
+  },
+  {
     path: '/profile',
     component: MainLayout,
     children: [

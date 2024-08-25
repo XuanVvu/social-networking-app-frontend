@@ -4,6 +4,8 @@ import { Close } from '@element-plus/icons-vue'
 import Comment from '@/components/posts/comments/Comment.vue'
 import DateTime from '@/components/common/DateTime.vue'
 import callApi from '@/services/api'
+import { ElMessageBox, ElMessage } from 'element-plus'
+import { emit } from 'process'
 
 const isOpenPostDetail = ref()
 const listComments = ref()
@@ -14,9 +16,16 @@ const commentContent = reactive({
   content: ''
 })
 
+const emit = defineEmits(['fetchCommentsData'])
+
 const openPostDetail = (comments: any) => {
   listComments.value = comments
   isOpenPostDetail.value = true
+}
+
+const closePostDetail = () => {
+  emit('fetchCommentsData')
+  isOpenPostDetail.value = false
 }
 const deleteComment = async (deleteId: number) => {
   await callApi.delete(`/comments/${deleteId}`)
@@ -74,7 +83,7 @@ defineExpose({
                 </div>
               </div>
             </div>
-            <Close class="w-8 cursor-pointer" @click="isOpenPostDetail = false" />
+            <Close class="w-8 cursor-pointer" @click="closePostDetail" />
           </div>
           <p>
             {{ data.content }}

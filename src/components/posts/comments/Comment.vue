@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { MoreFilled } from '@element-plus/icons-vue'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import DateTime from '@/components/common/DateTime.vue'
-import callApi from '@/services/api'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const isHover = ref(false)
 
@@ -13,7 +13,25 @@ const { data } = defineProps<{ data: any }>()
 const emit = defineEmits(['deleteCommentFromChild', 'updateCommentFromChild'])
 
 const deleteComment = () => {
-  emit('deleteCommentFromChild')
+  ElMessageBox.confirm('Bạn có muốn xoá bình luận không?”.', 'Xóa bình luận', {
+    confirmButtonText: 'Có',
+    cancelButtonText: 'Hủy',
+    type: 'error',
+    customClass: 'delete-dialog'
+  })
+    .then(async () => {
+      emit('deleteCommentFromChild')
+      ElMessage({
+        type: 'success',
+        message: 'Bình luận đã được xóa thành công.'
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Đã xảy ra lỗi khi xóa bài viết. Vui lòng thử lại.'
+      })
+    })
 }
 
 const updateComment = () => {
@@ -22,12 +40,6 @@ const updateComment = () => {
 
 const setHover = (value: boolean) => {
   isHover.value = value
-}
-
-const isHiddenCommentSettings = () => {
-  console.log(currentUserId !== data.author.id)
-
-  return currentUserId !== data.author.id
 }
 </script>
 <template>
