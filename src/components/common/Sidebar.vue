@@ -45,10 +45,10 @@ const feeds = [
     idScreen: 'notification'
   },
   {
-    name: 'Chat GPT',
+    name: 'Bài viết đã lưu',
     iconClass: 'bg-red-400 text-white p-2 rounded-full',
     component: Promotion,
-    idScreen: 'new-feed1'
+    idScreen: 'saved-post'
   },
   {
     name: 'Trang cá nhân',
@@ -72,7 +72,6 @@ const handleClickSidebarItem = (item: any) => {
       break
     case 'profile':
       navigationId('Posts', currentUserId)
-
       break
     case 'create-post':
       createPostRef?.value?.openDialog()
@@ -83,9 +82,12 @@ const handleClickSidebarItem = (item: any) => {
     case 'chat':
       navigateTo('/inbox')
       break
-
+    case 'saved-post':
+      navigateTo('/saved-post')
+      break
     case 'notification':
       notificationRef.value?.openDrawer()
+      break
   }
 }
 </script>
