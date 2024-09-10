@@ -40,15 +40,10 @@ const scrollToBottom = (smooth = true) => {
 const fetchMessages = async () => {
   const chatId = route.params.id
   messages.value = await callApi.get('/messages/10')
-  console.log(messages.value)
 }
 
 const sendMessage = async () => {
-  // const chatId = route.params.id
-  console.log(newMessage.value)
-
   if (newMessage.value.trim()) {
-    console.log(1)
     const messagePayload = {
       chatId: 10,
       senderId: currentUserId,
@@ -56,7 +51,6 @@ const sendMessage = async () => {
     }
     socket.emit('sendMessage', messagePayload)
     newMessage.value = ''
-    console.log(messagePayload)
   }
 }
 

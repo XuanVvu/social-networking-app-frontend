@@ -1,15 +1,6 @@
 <script setup lang="ts">
 import useNavigation from '@/composables/useNavigation'
-import {
-  HomeFilled,
-  UserFilled,
-  StarFilled,
-  Promotion,
-  Setting,
-  Comment,
-  BellFilled,
-  Plus
-} from '@element-plus/icons-vue'
+import { HomeFilled, UserFilled, Promotion, Comment, Plus } from '@element-plus/icons-vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
 import ListNotifications from '@/components/notifications/ListNotifications.vue'
 import { onMounted, ref, watch, watchEffect } from 'vue'
@@ -95,14 +86,16 @@ const handleClickSidebarItem = (item: any) => {
 }
 
 watch(
-  () => user.value?.avatar,
-  (newAvatar, oldAvatar) => {
-    if (!authStore.isFetching) {
-      authStore.fetchUserInfo()
-    }
+  () => authStore.getUser,
+  (newUser, oldUser) => {
     user.value = authStore.getUser
   }
 )
+
+onMounted(() => {
+  authStore.fetchUserInfo()
+  user.value = authStore.getUser
+})
 </script>
 <template>
   <div

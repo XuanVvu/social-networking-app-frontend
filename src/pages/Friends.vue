@@ -2,11 +2,13 @@
 import FriendBox from '@/components/friends/FriendBox.vue'
 import callApi from '@/services/api'
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 const value = ref('Option3')
 const friends = ref()
 const currentUser = localStorage.getItem('currentUser')
 const currentUserId = JSON.parse(currentUser as any).id
+const route = useRoute()
 
 const options = ref([
   {
@@ -52,6 +54,12 @@ const getNonFriends = async () => {
 }
 
 onMounted(async () => {
+  getFriendsOrRequest(true)
+  if (route.query.status === 'non-friend') {
+    getNonFriends()
+    value.value = 'Option1'
+    return
+  }
   getFriendsOrRequest(true)
 })
 </script>

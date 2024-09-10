@@ -79,9 +79,6 @@ const cancelFriendRequest = async () => {
 const handleChat = async () => {
   const currentUserId = currentUserData.id
   const chat = await chatStore.getOrCreateChat(currentUserId, Number(route.params.id))
-
-  console.log(chat)
-
   if (chat) {
     router.push(`/inbox/${chat.id}`)
   }

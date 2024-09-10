@@ -6,6 +6,7 @@ import { onMounted, ref } from 'vue'
 
 const postsData = ref()
 const listPostLiked = ref()
+const nonFriends = ref()
 
 const onPostDeleted = async (postId: any) => {
   await callApi.delete(`post/delete/${postId}`)
@@ -22,9 +23,14 @@ const fetchLikeStatus = async () => {
   listPostLiked.value = response
 }
 
+const getNonFriends = async () => {
+  nonFriends.value = await callApi.get('/friends/non-friends')
+}
+
 onMounted(async () => {
-  getAllPosts()
-  fetchLikeStatus()
+  await getAllPosts()
+  await fetchLikeStatus()
+  await getNonFriends()
 })
 </script>
 
@@ -41,7 +47,7 @@ onMounted(async () => {
           />
         </div>
       </div>
-      <FriendSuggestions />
+      <FriendSuggestions :nonFriendsData="nonFriends" />
     </div>
   </div>
 </template>

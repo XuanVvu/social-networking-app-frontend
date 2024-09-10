@@ -3,6 +3,7 @@ import InputBase from '@/components/base/InputBase.vue'
 import { reactive, ref } from 'vue'
 import callApi from '@/services/api'
 import useNavigation from '@/composables/useNavigation'
+import { useAuthStore } from '@/store/auth'
 
 const form = reactive({
   firstName: '',
@@ -20,6 +21,7 @@ const dialogImageUrl = ref<string>('')
 const currentUser = localStorage.getItem('currentUser')
 const currentUserData = JSON.parse(currentUser as any)
 const currentUserId = JSON.parse(currentUser as any).id
+const authStore = useAuthStore()
 
 const handleChangeFile = (file: any, fileListUpload: any) => {
   fileList.value = fileListUpload
@@ -32,14 +34,14 @@ const submitUpdate = async () => {
   formData.append('genders', form.genders ? form.genders : currentUserData.genders)
   formData.append('description', form.description ? form.description : currentUserData.description)
   fileList.value.forEach((file) => {
-    formData.append('avatar', file.raw ? file.raw : currentUserData.avatar)
+    formData.append('avatar', file.raw)
   })
-
   await callApi.put(`/users/update/${currentUserId}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   })
+  authStore.fetchUserInfo()
   navigationId('Posts', currentUserId)
 }
 </script>

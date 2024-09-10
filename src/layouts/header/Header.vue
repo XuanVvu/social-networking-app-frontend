@@ -2,7 +2,7 @@
 import { Search, UserFilled } from '@element-plus/icons-vue'
 import useNavigation from '@/composables/useNavigation'
 import logo from '@/assets/logo.png'
-import { ref, watchEffect } from 'vue'
+import { onMounted, ref, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/store/auth'
 
@@ -11,7 +11,6 @@ const searchContent = ref('')
 const { logout, navigateTo, navigationWithQuery } = useNavigation()
 const avtDropdown = ref()
 const currentUser = localStorage.getItem('currentUser')
-const currentUserAvt = JSON.parse(currentUser as any).avatar
 const user = ref()
 const authStore = useAuthStore()
 
@@ -28,11 +27,16 @@ const handleSearch = () => {
   navigationWithQuery('/search', 'search', searchContent.value)
 }
 
-watchEffect(() => {
-  // if (!authStore.isFetching) {
-  //   authStore.fetchUserInfo()
-  // }
-  // user.value = authStore.getUser
+watch(
+  () => authStore.getUser,
+  (newUser, oldUser) => {
+    user.value = authStore.getUser
+  }
+)
+
+onMounted(() => {
+  authStore.fetchUserInfo()
+  user.value = authStore.getUser
 })
 </script>
 <template>
