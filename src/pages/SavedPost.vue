@@ -14,7 +14,6 @@ const onRemoveSavedPost = async (postId: any) => {
 const getAllPosts = async () => {
   const posts = await callApi.get('/saved-post')
   savedPostsData.value = posts
-  console.log(savedPostsData.value)
 }
 
 const fetchLikeStatus = async () => {

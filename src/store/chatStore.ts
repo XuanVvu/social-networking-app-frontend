@@ -44,7 +44,6 @@ export const useChatStore = defineStore('chat', {
       // }
 
       const response = await axios.get(`/chats/${chatId}/messages`)
-      console.log(response)
     }
   }
 })

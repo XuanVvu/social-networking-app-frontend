@@ -3,6 +3,7 @@ import { MoreFilled } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import DateTime from '@/components/common/DateTime.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
+import { UserFilled } from '@element-plus/icons-vue'
 
 const isHover = ref(false)
 
@@ -48,7 +49,14 @@ const setHover = (value: boolean) => {
     @mouseenter="isHover = true"
     @mouseleave="isHover = false"
   >
-    <el-avatar class="w-[32px] h-[32px] mt-[8px]"> user </el-avatar>
+    <div class="">
+      <img
+        v-if="data.author?.avatar"
+        :src="`http://localhost:3000/uploads/avatars/${data.author?.avatar}`"
+        class="w-[32px] h-[32px] rounded-full object-cover"
+      />
+      <el-avatar v-else :icon="UserFilled" class="w-[32px] h-[32px]"></el-avatar>
+    </div>
     <div class="flex-1">
       <p class="font-semibold text-black">
         {{ data.author.firstName + ' ' + data.author.lastName }}

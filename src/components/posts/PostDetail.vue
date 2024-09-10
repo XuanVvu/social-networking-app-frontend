@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { Close } from '@element-plus/icons-vue'
 import Comment from '@/components/posts/comments/Comment.vue'
 import DateTime from '@/components/common/DateTime.vue'
 import callApi from '@/services/api'
-import { ElMessageBox, ElMessage } from 'element-plus'
-import { emit } from 'process'
+import { UserFilled } from '@element-plus/icons-vue'
 
 const isOpenPostDetail = ref()
 const listComments = ref()
@@ -73,7 +72,14 @@ defineExpose({
         <div class="border-b pb-3">
           <div class="flex justify-between pb-3">
             <div class="flex items-center gap-3">
-              <el-avatar> user </el-avatar>
+              <div class="mr-3">
+                <img
+                  v-if="data.user?.avatar"
+                  :src="`http://localhost:3000/uploads/avatars/${data.user?.avatar}`"
+                  class="w-12 h-12 rounded-full object-cover"
+                />
+                <el-avatar v-else :icon="UserFilled"></el-avatar>
+              </div>
               <div>
                 <div class="font-semibold text-black text-base">
                   {{ data.user?.firstName + ' ' + data.user?.lastName }}
