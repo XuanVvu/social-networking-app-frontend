@@ -1,28 +1,21 @@
 <script setup lang="ts">
-import { Bell, ChatSquare, Search, UserFilled } from '@element-plus/icons-vue'
+import { Search, UserFilled } from '@element-plus/icons-vue'
 import useNavigation from '@/composables/useNavigation'
 import logo from '@/assets/logo.png'
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/store/auth'
 
-const goToMessager = () => {
-  navigateTo('/inbox')
-}
-const iconHeader = ref([
-  {
-    component: ChatSquare,
-    isDot: true,
-    action: goToMessager
-  },
-  {
-    component: Bell,
-    isDot: false
-  }
-])
-const { logout, navigateTo } = useNavigation()
+const searchContent = ref('')
+
+const { logout, navigateTo, navigationWithQuery } = useNavigation()
 const avtDropdown = ref()
 const currentUser = localStorage.getItem('currentUser')
 const currentUserAvt = JSON.parse(currentUser as any).avatar
+const user = ref()
+const authStore = useAuthStore()
 
+const router = useRouter()
 const handleLogout = () => {
   logout()
 }
@@ -30,6 +23,17 @@ const handleLogout = () => {
 const goToHome = () => {
   navigateTo('/')
 }
+
+const handleSearch = () => {
+  navigationWithQuery('/search', 'search', searchContent.value)
+}
+
+watchEffect(() => {
+  // if (!authStore.isFetching) {
+  //   authStore.fetchUserInfo()
+  // }
+  // user.value = authStore.getUser
+})
 </script>
 <template>
   <div
@@ -46,6 +50,8 @@ const goToHome = () => {
       <input
         placeholder="Start typing to search..."
         class="w-full py-2.5 ps-2 bg-[#eee] rounded-xl"
+        v-model="searchContent"
+        @keyup.enter="handleSearch"
       />
     </div>
 
@@ -55,7 +61,11 @@ const goToHome = () => {
         ref="avtDropdown"
         trigger="click"
       >
-        <el-avatar v-if="currentUserAvt" :src="currentUserAvt"> </el-avatar>
+        <el-avatar
+          v-if="user?.avatar"
+          :src="`http://localhost:3000/uploads/avatars/${user?.avatar}`"
+        >
+        </el-avatar>
         <el-avatar v-else :icon="UserFilled"> </el-avatar>
 
         <template #dropdown>

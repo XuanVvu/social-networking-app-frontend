@@ -1,16 +1,19 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch, watchEffect } from 'vue'
 import { TabsPaneContext } from 'element-plus/es/components/tabs/src/constants'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import useNavigation from '@/composables/useNavigation'
 import { useProfileStore } from '@/store/profile'
 import { UserFilled } from '@element-plus/icons-vue'
 import callApi from '@/services/api'
+import { useChatStore } from '@/store/chatStore'
 
 const route = useRoute()
-const roleFriend = ref(2)
+const router = useRouter()
 const { navigateTo, navigationId } = useNavigation()
 const activeName = ref('')
+const friendStatusData = ref()
+const chatStore = useChatStore()
 
 const profileStore = useProfileStore()
 const isDataReady = ref(false)
@@ -53,6 +56,37 @@ const updateActiveTab = () => {
   }
 }
 
+const addFriend = async () => {
+  await callApi.post(`/friends/request/${Number(route.params.id)}`, {})
+  getFriendsStatus()
+}
+
+const acceptFriend = async () => {
+  await callApi.post(`/friends/accept/${Number(route.params.id)}`, {})
+  getFriendsStatus()
+}
+
+const removeFriend = async () => {
+  await callApi.delete(`/friends/${Number(route.params.id)}`, {})
+  getFriendsStatus()
+}
+
+const cancelFriendRequest = async () => {
+  await callApi.delete(`/friends/cancel/${Number(route.params.id)}`, {})
+  getFriendsStatus()
+}
+
+const handleChat = async () => {
+  const currentUserId = currentUserData.id
+  const chat = await chatStore.getOrCreateChat(currentUserId, Number(route.params.id))
+
+  console.log(chat)
+
+  if (chat) {
+    router.push(`/inbox/${chat.id}`)
+  }
+}
+
 watch(() => route.name, updateActiveTab, { immediate: true })
 
 watchEffect(async () => {
@@ -61,15 +95,25 @@ watchEffect(async () => {
   user.value = userData
 })
 
+const getFriendsStatus = async () => {
+  const friendStatus = await callApi.get(`/friends/status/${Number(route.params.id)}`)
+  friendStatusData.value = friendStatus.status
+}
+
 onMounted(async () => {
   await profileStore.fetchPosts(Number(route.params.id))
+  getFriendsStatus()
   isDataReady.value = true
 })
 </script>
 <template>
   <div class="flex bg-white justify-center gap-[100px] py-[30px]">
-    <div class="w-[200px] h-[200px] rounded-full" v-if="user?.avatar">
-      <img :src="user?.avatar" alt="" />
+    <div class="" v-if="user?.avatar">
+      <img
+        :src="`http://localhost:3000/uploads/avatars/${user.avatar}`"
+        class="object-cover w-[200px] h-[200px] rounded-full"
+        alt=""
+      />
     </div>
     <el-avatar v-else :icon="UserFilled" class="w-[200px] h-[200px]"></el-avatar>
 
@@ -87,15 +131,37 @@ onMounted(async () => {
       </div>
       <div class="flex gap-5 text-white" v-if="Number(route.params.id) !== currentUserData.id">
         <div>
-          <button class="bg-blue-600 px-5 py-2 rounded-2xl" v-if="roleFriend === 0">Kết bạn</button>
-          <button class="bg-slate-600 px-5 py-2 rounded-2xl" v-if="roleFriend === 1">
+          <button
+            class="bg-blue-600 px-5 py-2 rounded-2xl"
+            v-if="friendStatusData === 'not_friends'"
+            @click="addFriend"
+          >
+            Kết bạn
+          </button>
+          <button
+            class="bg-slate-600 px-5 py-2 rounded-2xl"
+            v-if="friendStatusData === 'pending_request'"
+            @click="acceptFriend"
+          >
             Chấp nhận
           </button>
-          <button class="bg-red-600 px-5 py-2 rounded-2xl" v-if="roleFriend === 2">
+          <button
+            class="bg-red-600 px-5 py-2 rounded-2xl"
+            v-if="friendStatusData === 'friends'"
+            @click="removeFriend"
+          >
             Gỡ kết bạn
           </button>
+
+          <button
+            class="bg-red-600 px-5 py-2 rounded-2xl"
+            v-if="friendStatusData === 'sent_request'"
+            @click="cancelFriendRequest"
+          >
+            Huỷ lời mời
+          </button>
         </div>
-        <button class="bg-blue-600 px-5 py-2 rounded-2xl">Nhắn tin</button>
+        <button class="bg-blue-600 px-5 py-2 rounded-2xl" @click="handleChat">Nhắn tin</button>
       </div>
     </div>
   </div>

@@ -146,9 +146,9 @@ onMounted(async () => {
       <div class="flex items-center">
         <div class="mr-4 flex items-center cursor-pointer" @click="handleClickUser">
           <img
-            class="w-10 h-10 rounded-full mr-4"
+            class="w-10 h-10 rounded-full"
             alt="Profile Picture"
-            :src="data.user?.avatar"
+            :src="`http://localhost:3000/uploads/avatars/${data.user?.avatar}`"
             v-if="data.user?.avatar"
           />
 

@@ -2,7 +2,7 @@ import callApi from '@/services/api'
 import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({ user: null, accessToken: null }),
+  state: () => ({ user: null, accessToken: null, isFetching: false }),
   getters: {
     isLoggedIn: (state) => !!state.accessToken,
     getUser: (state) => state.user
@@ -35,11 +35,14 @@ export const useAuthStore = defineStore('auth', {
 
     async fetchUserInfo() {
       try {
+        this.isFetching = true
         const response = await callApi.get('/users/current-user')
         this.user = response
       } catch (error) {
         console.error('Failed to fetch user info', error)
         this.clearAuthData()
+      } finally {
+        this.isFetching = false
       }
     },
     clearAuthData() {

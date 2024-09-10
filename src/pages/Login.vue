@@ -94,7 +94,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex flex-col justify-center w-1/2 p-20">
-        <h2 class="text-4xl font-bold mb-10">Login into your account</h2>
+        <h2 class="text-4xl font-bold mb-10">Đăng nhập tài khoản</h2>
 
         <el-form class="flex flex-col gap-3" ref="ruleFormRef" :rules="rules" :model="form" :size="formSize"
           status-icon>
@@ -104,12 +104,12 @@ onMounted(() => {
           <el-form-item prop="password">
             <InputBase type="password" placehoder="Mật khẩu" v-model="form.password" :icon="Lock" />
           </el-form-item>
-          <div class="flex justify-between items-center mb-6">
+          <!-- <div class="flex justify-between items-center mb-6">
             <el-checkbox :value="form.rememberCheckbox" name="type" @change="onCheckboxChange">
               Simple brand exposure
             </el-checkbox>
             <a href="#" class="text-[#343a40] font-semibold">Forgot your Password?</a>
-          </div>
+          </div> -->
           <el-form-item>
             <Button classFromParent="w-full py-6 py-2" @click="onSubmit(ruleFormRef)">
               Login
@@ -117,7 +117,7 @@ onMounted(() => {
           </el-form-item>
           <div class="text-center">
             <p class="mb-4">
-              Don't have an account? <a href="/register" class="text-blue-600 font-semibold">Register</a>
+              Bạn chưa có tài khoản? <a href="/register" class="text-blue-600 font-semibold">Đăng ký</a>
             <div>{{ loginErrorData?.success }}</div>
             </p>
           </div>

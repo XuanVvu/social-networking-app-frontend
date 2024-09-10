@@ -22,7 +22,7 @@ const routes = [
     ]
   },
   {
-    path: '/inbox',
+    path: '/inbox/:id?',
     component: MainLayout,
     children: [
       {
@@ -118,6 +118,11 @@ const routes = [
         path: 'information',
         name: 'SettingsInformation',
         component: () => import('@/pages/SettingsAccount.vue')
+      },
+      {
+        path: 'change-password',
+        name: 'ChangePassword',
+        component: () => import('@/pages/ChangePassword.vue')
       }
     ]
   },

@@ -10,10 +10,14 @@ export default function useNavigation() {
     router.push({ name: name, params: { id: id } })
   }
 
+  const navigationWithQuery = (path: string, queryText: string, queryContent: string) => {
+    router.push({ path: path, query: { [queryText]: queryContent } })
+  }
+
   const logout = () => {
     localStorage.removeItem('currentUser')
     router.push('/login')
   }
 
-  return { navigateTo, navigationId, logout }
+  return { navigateTo, navigationId, logout, navigationWithQuery }
 }

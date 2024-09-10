@@ -12,7 +12,8 @@ import {
 } from '@element-plus/icons-vue'
 import CreatePost from '@/components/posts/CreatePost.vue'
 import ListNotifications from '@/components/notifications/ListNotifications.vue'
-import { ref } from 'vue'
+import { onMounted, ref, watch, watchEffect } from 'vue'
+import { useAuthStore } from '@/store/auth'
 const feeds = [
   {
     name: 'Bảng tin',
@@ -38,12 +39,12 @@ const feeds = [
     component: Comment,
     idScreen: 'chat'
   },
-  {
-    name: 'Thông báo',
-    iconClass: 'bg-gray-600 text-white p-2 rounded-full',
-    component: BellFilled,
-    idScreen: 'notification'
-  },
+  // {
+  //   name: 'Thông báo',
+  //   iconClass: 'bg-gray-600 text-white p-2 rounded-full',
+  //   component: BellFilled,
+  //   idScreen: 'notification'
+  // },
   {
     name: 'Bài viết đã lưu',
     iconClass: 'bg-red-400 text-white p-2 rounded-full',
@@ -62,8 +63,10 @@ const notificationRef = ref<InstanceType<typeof ListNotifications> | null>(null)
 const currentUser = localStorage.getItem('currentUser')
 const currentUserAvt = JSON.parse(currentUser as any).avatar
 const currentUserId = JSON.parse(currentUser as any).id
+const user = ref()
 
 const { navigateTo, navigationId } = useNavigation()
+const authStore = useAuthStore()
 
 const handleClickSidebarItem = (item: any) => {
   switch (item.idScreen) {
@@ -90,6 +93,16 @@ const handleClickSidebarItem = (item: any) => {
       break
   }
 }
+
+watch(
+  () => user.value?.avatar,
+  (newAvatar, oldAvatar) => {
+    if (!authStore.isFetching) {
+      authStore.fetchUserInfo()
+    }
+    user.value = authStore.getUser
+  }
+)
 </script>
 <template>
   <div
@@ -108,7 +121,12 @@ const handleClickSidebarItem = (item: any) => {
           <component :is="item.component" class="w-[20px]"></component>
         </div>
         <div v-else>
-          <img v-if="currentUserAvt" class="rounded-full w-9 h-9" :src="currentUserAvt" alt="" />
+          <img
+            v-if="user?.avatar"
+            class="rounded-full w-9 h-9"
+            :src="`http://localhost:3000/uploads/avatars/${user?.avatar}`"
+            alt=""
+          />
           <el-avatar v-else :icon="UserFilled"></el-avatar>
         </div>
       </div>

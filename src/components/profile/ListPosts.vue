@@ -24,12 +24,14 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class="my-5" v-for="item of posts" :key="item.id">
-    <PostComponents
-      :data="item"
-      @post-deleted="onPostDeleted"
-      v-if="listPostLiked"
-      :listPostLiked="listPostLiked"
-    />
+  <div style="min-height: calc(100vh - 395px)">
+    <div class="my-5" v-for="item of posts" :key="item.id">
+      <PostComponents
+        :data="item"
+        @post-deleted="onPostDeleted"
+        v-if="listPostLiked"
+        :listPostLiked="listPostLiked"
+      />
+    </div>
   </div>
 </template>

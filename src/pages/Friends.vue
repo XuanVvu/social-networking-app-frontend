@@ -1,24 +1,59 @@
 <script lang="ts" setup>
-import FriendList from '@/components/friends/FriendList.vue'
-
-import { ref } from 'vue'
+import FriendBox from '@/components/friends/FriendBox.vue'
+import callApi from '@/services/api'
+import { onMounted, ref } from 'vue'
 
 const value = ref('Option3')
+const friends = ref()
+const currentUser = localStorage.getItem('currentUser')
+const currentUserId = JSON.parse(currentUser as any).id
 
-const options = [
+const options = ref([
   {
     value: 'Option3',
-    label: 'Bạn bè'
+    label: 'Bạn bè',
+    onClick: () => getFriendsOrRequest(true)
   },
   {
     value: 'Option1',
-    label: 'Gợi ý kết bạn'
+    label: 'Gợi ý kết bạn',
+    onClick: () => getNonFriends()
   },
   {
     value: 'Option2',
-    label: 'Lời mời kết bạn'
+    label: 'Lời mời kết bạn',
+    onClick: () => getFriendsOrRequest(false)
   }
-]
+])
+
+const getFriendsOrRequest = async (flag: boolean) => {
+  const friendsData = await callApi.get('/friends', {
+    params: {
+      status: flag ? 'accepted' : 'pending'
+    }
+  })
+  if (!flag) {
+    const friendsRequest = friendsData.map((item: any) => {
+      return item.requester
+    })
+    friends.value = friendsRequest
+  } else {
+    const friendsAccepted = friendsData.map((item: any) => {
+      if (item.requester.id == currentUserId) {
+        return item.recipient
+      }
+      return item.requester
+    })
+    friends.value = friendsAccepted
+  }
+}
+const getNonFriends = async () => {
+  friends.value = await callApi.get('/friends/non-friends')
+}
+
+onMounted(async () => {
+  getFriendsOrRequest(true)
+})
 </script>
 
 <template>
@@ -31,10 +66,22 @@ const options = [
           :key="item.value"
           :label="item.label"
           :value="item.value"
+          @click="item.onClick"
         />
       </el-select>
     </div>
 
-    <FriendList />
+    <!-- <FriendList /> -->
+    <div class="flex gap-2 flex-wrap">
+      <div v-for="item of friends" :key="item.id">
+        <FriendBox
+          :data="item"
+          @updateFriends="getFriendsOrRequest(true)"
+          @updateFriendsRequest="getFriendsOrRequest(false)"
+          @updateNonFriends="getNonFriends"
+        />
+      </div>
+    </div>
+    <!-- <el-empty description="Không có dữ liệu" /> -->
   </div>
 </template>
