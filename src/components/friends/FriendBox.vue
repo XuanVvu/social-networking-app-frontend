@@ -58,21 +58,21 @@ onMounted(() => {
     </div>
     <div class="text-white font-semibold">
       <button
-        class="bg-blue-600 px-5 py-2 rounded-2xl"
+        class="bg-blue-600 px-5 py-2 rounded-2xl hover:opacity-80"
         v-if="friendStatusData === 'not_friends'"
         @click="addFriend"
       >
         Kết bạn
       </button>
       <button
-        class="bg-slate-600 px-5 py-2 rounded-2xl"
+        class="bg-slate-600 px-5 py-2 rounded-2xl hover:opacity-80"
         v-if="friendStatusData === 'pending_request'"
         @click="acceptFriend"
       >
         Chấp nhận
       </button>
       <button
-        class="bg-red-600 px-5 py-2 rounded-2xl"
+        class="bg-red-600 px-5 py-2 rounded-2xl hover:opacity-80"
         v-if="friendStatusData === 'friends'"
         @click="removeFriend"
       >

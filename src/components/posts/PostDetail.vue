@@ -5,6 +5,7 @@ import Comment from '@/components/posts/comments/Comment.vue'
 import DateTime from '@/components/common/DateTime.vue'
 import callApi from '@/services/api'
 import { UserFilled } from '@element-plus/icons-vue'
+import useNavigation from '@/composables/useNavigation'
 
 const isOpenPostDetail = ref()
 const listComments = ref()
@@ -16,6 +17,7 @@ const commentContent = reactive({
 })
 
 const emit = defineEmits(['fetchCommentsData'])
+const { navigationId } = useNavigation()
 
 const openPostDetail = (comments: any) => {
   listComments.value = comments
@@ -50,6 +52,10 @@ const handleCommentPost = async () => {
   commentContent.content = ''
 }
 
+const gotoProfile = (id: number) => {
+  navigationId('Posts', id)
+}
+
 defineExpose({
   openPostDetail
 })
@@ -72,7 +78,7 @@ defineExpose({
         <div class="border-b pb-3">
           <div class="flex justify-between pb-3">
             <div class="flex items-center gap-3">
-              <div class="mr-3">
+              <div class="mr-2 cursor-pointer" @click="gotoProfile(data.user?.id)">
                 <img
                   v-if="data.user?.avatar"
                   :src="`http://localhost:3000/uploads/avatars/${data.user?.avatar}`"
@@ -81,8 +87,11 @@ defineExpose({
                 <el-avatar v-else :icon="UserFilled"></el-avatar>
               </div>
               <div>
-                <div class="font-semibold text-black text-base">
-                  {{ data.user?.firstName + ' ' + data.user?.lastName }}
+                <div
+                  class="font-semibold text-black text-base cursor-pointer"
+                  @click="gotoProfile(data.user?.id)"
+                >
+                  {{ data.user?.id + data.user?.firstName + ' ' + data.user?.lastName }}
                 </div>
                 <div class="text-sm text-gray-500">
                   <DateTime :time="data.createdAt" />
