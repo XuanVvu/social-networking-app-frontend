@@ -4,8 +4,10 @@ import { ref } from 'vue'
 import DateTime from '@/components/common/DateTime.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { UserFilled } from '@element-plus/icons-vue'
+import useNavigation from '@/composables/useNavigation'
 
 const isHover = ref(false)
+const { navigationId } = useNavigation()
 
 const currentUser = localStorage.getItem('currentUser')
 const currentUserId = JSON.parse(currentUser as any).id
@@ -34,6 +36,9 @@ const deleteComment = () => {
       })
     })
 }
+const gotoProfile = (id: number) => {
+  navigationId('Posts', id)
+}
 
 const updateComment = () => {
   emit('updateCommentFromChild', data.id)
@@ -49,7 +54,7 @@ const setHover = (value: boolean) => {
     @mouseenter="isHover = true"
     @mouseleave="isHover = false"
   >
-    <div class="">
+    <div class="cursor-pointer" @click="gotoProfile(data.author.id)">
       <img
         v-if="data.author?.avatar"
         :src="`http://localhost:3000/uploads/avatars/${data.author?.avatar}`"
@@ -58,7 +63,7 @@ const setHover = (value: boolean) => {
       <el-avatar v-else :icon="UserFilled" class="w-[32px] h-[32px]"></el-avatar>
     </div>
     <div class="flex-1">
-      <p class="font-semibold text-black">
+      <p class="font-semibold text-black cursor-pointer" @click="gotoProfile(data.author.id)">
         {{ data.author.firstName + ' ' + data.author.lastName }}
       </p>
       <p class="pb-1 text-sm">

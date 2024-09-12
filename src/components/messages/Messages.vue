@@ -38,14 +38,13 @@ const scrollToBottom = (smooth = true) => {
 }
 
 const fetchMessages = async () => {
-  const chatId = route.params.id
-  messages.value = await callApi.get('/messages/10')
+  messages.value = await callApi.get(`/messages/${Number(route.params.id)}`)
 }
 
 const sendMessage = async () => {
   if (newMessage.value.trim()) {
     const messagePayload = {
-      chatId: 10,
+      chatId: Number(route.params.id),
       senderId: currentUserId,
       content: newMessage.value.trim()
     }
@@ -67,27 +66,28 @@ watch(
 )
 
 watch(
-  () => 10,
+  () => Number(route.params.id),
   () => {
     fetchMessages()
-    socket.emit('joinChat', 10)
+    socket.emit('joinChat', Number(route.params.id))
   }
 )
 
 onMounted(() => {
   scrollToBottom(false)
-  socket.emit('joinChat', 10)
+  socket.emit('joinChat', Number(route.params.id))
   fetchMessages()
   // socket.emit('join_chat', route.params.id)
 })
 
 onUnmounted(() => {
-  socket.emit('leaveChat', 10)
+  socket.emit('leaveChat', Number(route.params.id))
 })
 </script>
 
 <template>
-  <div class="flex flex-col bg-white h-[calc(100vh-80px)]">
+  <el-empty v-if="!Number(route.params.id)" style="height: 100%" description="Tin nhắn của bạn" />
+  <div v-else class="flex flex-col bg-white h-[calc(100vh-80px)]">
     <div class="flex-1 overflow-y-auto p-4 space-y-4">
       <template v-for="(message, index) in messages" :key="index">
         <MessageBox :message="message" />

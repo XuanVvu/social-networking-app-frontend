@@ -16,6 +16,7 @@ const currentUserId = JSON.parse(currentUser as any).id
     >
       <img
         v-if="message.sender.id !== currentUserId"
+        :src="`http://localhost:3000/uploads/avatars/${message.sender?.avatar}`"
         alt="Byrom Guittet"
         class="w-8 h-8 rounded-full"
       />
