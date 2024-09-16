@@ -3,10 +3,10 @@ import Login from '@/assets/login-bg.jpg'
 import { onMounted, reactive, ref, toRaw } from 'vue'
 import { ComponentSize, FormInstance, FormRules } from 'element-plus'
 import { Lock, User } from '@element-plus/icons-vue'
-import logo from "@/assets/logo.png"
+import logo from '@/assets/logo.png'
 import InputBase from '@/components/base/InputBase.vue'
 import Button from '@/components/base/Button.vue'
-import useNavigation from "@/composables/useNavigation"
+import useNavigation from '@/composables/useNavigation'
 import { useAuthStore } from '@/store/auth'
 
 export interface RuleForm {
@@ -28,32 +28,32 @@ const { navigateTo } = useNavigation()
 const authStore = useAuthStore()
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
+  if (!formEl) return
 
   try {
     const valid = await formEl.validate()
-    if (!valid) return;
+    if (!valid) return
 
-    const user = toRaw(form);
+    const user = toRaw(form)
 
     if (typeof authStore.login !== 'function') {
-      console.error('authStore.login is not a function');
-      return;
+      console.error('authStore.login is not a function')
+      return
     }
 
-    const response = await authStore.login(user.email || '', user.password || '');
-    
+    const response = await authStore.login(user.email || '', user.password || '')
+
     if (!response.data?.success) {
-      loginErrorData.value = response.data;
-      isOpenDialogErrorLogin.value = true;
-      return;
+      loginErrorData.value = response.data
+      isOpenDialogErrorLogin.value = true
+      return
     }
 
-    navigateTo('/');
+    navigateTo('/')
   } catch (error) {
-    console.error('Login error:', error);
-    loginErrorData.value = { message: 'Đã xảy ra lỗi khi đăng nhập', success: false };
-    isOpenDialogErrorLogin.value = true;
+    console.error('Login error:', error)
+    loginErrorData.value = { message: 'Đã xảy ra lỗi khi đăng nhập', success: false }
+    isOpenDialogErrorLogin.value = true
   }
 }
 const rules = reactive<FormRules<RuleForm>>({
@@ -79,7 +79,6 @@ onMounted(() => {
   if (token) {
     navigateTo('/')
   }
-
 })
 </script>
 <template>
@@ -87,8 +86,10 @@ onMounted(() => {
     <div class="flex w-full">
       <div class="hidden md:flex w-1/2 bg-blue-50 justify-center items-center">
         <div class="text-center">
-          <img class="w-[250px] font-bold text-blue-600 relative top-[-70px] left-[-100px]" :src="logo" />
-
+          <img
+            class="w-[250px] font-bold text-blue-600 relative top-[-70px] left-[-100px]"
+            :src="logo"
+          />
 
           <img :src="Login" alt="Login Illustration" class="max-w-sm mx-auto" />
         </div>
@@ -96,8 +97,14 @@ onMounted(() => {
       <div class="flex flex-col justify-center w-1/2 p-20">
         <h2 class="text-4xl font-bold mb-10">Đăng nhập tài khoản</h2>
 
-        <el-form class="flex flex-col gap-3" ref="ruleFormRef" :rules="rules" :model="form" :size="formSize"
-          status-icon>
+        <el-form
+          class="flex flex-col gap-3"
+          ref="ruleFormRef"
+          :rules="rules"
+          :model="form"
+          :size="formSize"
+          status-icon
+        >
           <el-form-item prop="email">
             <InputBase type="email" placehoder="Email" v-model="form.email" :icon="User" />
           </el-form-item>
@@ -117,8 +124,8 @@ onMounted(() => {
           </el-form-item>
           <div class="text-center">
             <p class="mb-4">
-              Bạn chưa có tài khoản? <a href="/register" class="text-blue-600 font-semibold">Đăng ký</a>
-            <div>{{ loginErrorData?.success }}</div>
+              Bạn chưa có tài khoản?
+              <a href="/register" class="text-blue-600 font-semibold">Đăng ký</a>
             </p>
           </div>
         </el-form>
@@ -126,9 +133,14 @@ onMounted(() => {
     </div>
   </div>
 
-  <el-dialog v-model="isOpenDialogErrorLogin" :title="loginErrorData?.message" width="50%" align-center
-    class="rounded-lg p-8">
-    <span class=" my-8">Email hoặc mật khẩu không chính xác. Vui lòng thử lại!</span>
+  <el-dialog
+    v-model="isOpenDialogErrorLogin"
+    :title="loginErrorData?.message"
+    width="50%"
+    align-center
+    class="rounded-lg p-8"
+  >
+    <span class="my-8">Email hoặc mật khẩu không chính xác. Vui lòng thử lại!</span>
     <template #footer>
       <span class="dialog-footer">
         <Button @click="isOpenDialogErrorLogin = false"> Ok </Button>

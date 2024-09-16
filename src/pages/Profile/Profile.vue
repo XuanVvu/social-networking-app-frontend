@@ -123,7 +123,7 @@ onMounted(async () => {
     <div class="w-[30%]">
       <div class="flex justify-between pb-5">
         <h3 class="font-bold text-xl">{{ user?.firstName }} {{ user?.lastName }}</h3>
-        <span class="text-lg">{{ profileStore.getPosts.length }} bài viết </span>
+        <span class="text-lg">{{ profileStore.getPosts?.length }} bài viết </span>
       </div>
       <div class="font-bold text-xl">Về tôi</div>
       <div class="mb-5">
