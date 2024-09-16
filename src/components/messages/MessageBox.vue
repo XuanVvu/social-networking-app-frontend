@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { MesageTye } from './Messages.vue'
+import { UserFilled } from '@element-plus/icons-vue'
 
 const { message } = defineProps<{ message: MesageTye }>()
 const currentUser = localStorage.getItem('currentUser')
@@ -14,12 +15,15 @@ const currentUserId = JSON.parse(currentUser as any).id
         message.sender?.id !== currentUserId ? 'flex-row' : 'flex-row-reverse'
       ]"
     >
-      <img
-        v-if="message.sender.id !== currentUserId"
-        :src="`http://localhost:3000/uploads/avatars/${message.sender?.avatar}`"
-        alt="Byrom Guittet"
-        class="w-8 h-8 rounded-full"
-      />
+      <div v-if="message.sender.id !== currentUserId">
+        <img
+          v-if="message.sender?.avatar"
+          :src="`http://localhost:3000/uploads/avatars/${message.sender?.avatar}`"
+          alt="Byrom Guittet"
+          class="w-8 h-8 rounded-full"
+        />
+        <el-avatar class="w-12 h-12" v-else :icon="UserFilled"></el-avatar>
+      </div>
       <div>
         <p :class="['text-xs text-gray-500 mb-1', message.sender === 'You' ? 'text-end mr-1' : '']">
           {{ message.sender?.firstName + ' ' + message.sender?.lastName }}
