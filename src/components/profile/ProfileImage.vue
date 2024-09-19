@@ -29,7 +29,7 @@ const clickImage = (url: any) => {
     <div class="flex items-center bg-black h-full">
       <img
         class="object-contain p-2 w-full h-full"
-        :src="`http://localhost:3000${imgUrl}`"
+        :src="`http://localhost:3001${imgUrl}`"
         alt="Post Image"
       />
     </div>

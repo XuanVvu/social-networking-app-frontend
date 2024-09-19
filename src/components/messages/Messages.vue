@@ -18,7 +18,7 @@ const route = useRoute()
 const currentUser = localStorage.getItem('currentUser')
 const currentUserId = JSON.parse(currentUser as any).id
 
-const socket = io('http://localhost:3000')
+const socket = io('http://localhost:3001')
 
 const messages = ref<MesageTye[]>([])
 

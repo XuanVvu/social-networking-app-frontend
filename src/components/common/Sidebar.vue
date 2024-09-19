@@ -117,7 +117,7 @@ onMounted(() => {
           <img
             v-if="user?.avatar"
             class="rounded-full w-9 h-9"
-            :src="`http://localhost:3000/uploads/avatars/${user?.avatar}`"
+            :src="`http://localhost:3001/uploads/avatars/${user?.avatar}`"
             alt=""
           />
           <el-avatar v-else :icon="UserFilled"></el-avatar>

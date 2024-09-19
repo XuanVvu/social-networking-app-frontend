@@ -49,6 +49,7 @@ const handleCommentPost = async () => {
   }
   const comments = await callApi.get(`/comments/post/${data.id}`)
   listComments.value = comments
+  isCreateComment.value = true
   commentContent.content = ''
 }
 
@@ -68,7 +69,7 @@ defineExpose({
           <el-carousel-item v-for="item in data.photos" :key="item.id">
             <img
               class="object-contain p-2 w-full h-full"
-              :src="`http://localhost:3000${item.url}`"
+              :src="`http://localhost:3001${item.url}`"
               alt="Post Image"
             />
           </el-carousel-item>
@@ -81,7 +82,7 @@ defineExpose({
               <div class="mr-2 cursor-pointer" @click="gotoProfile(data.user?.id)">
                 <img
                   v-if="data.user?.avatar"
-                  :src="`http://localhost:3000/uploads/avatars/${data.user?.avatar}`"
+                  :src="`http://localhost:3001/uploads/avatars/${data.user?.avatar}`"
                   class="w-12 h-12 rounded-full object-cover"
                 />
                 <el-avatar v-else :icon="UserFilled"></el-avatar>

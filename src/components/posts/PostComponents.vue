@@ -33,12 +33,12 @@ const iconList = ref([
     onClick: () => openCommentPost(),
     countData: 0,
     text: 'bình luận'
-  },
-  {
-    icon: shareIcon,
-    countData: 0,
-    text: 'lượt chia sẻ'
   }
+  // {
+  //   icon: shareIcon,
+  //   countData: 0,
+  //   text: 'lượt chia sẻ'
+  // }
 ])
 
 const toggleLike = async () => {
@@ -148,7 +148,7 @@ onMounted(async () => {
           <img
             class="w-10 h-10 rounded-full"
             alt="Profile Picture"
-            :src="`http://localhost:3000/uploads/avatars/${data.user?.avatar}`"
+            :src="`http://localhost:3001/uploads/avatars/${data.user?.avatar}`"
             v-if="data.user?.avatar"
           />
 
@@ -197,7 +197,7 @@ onMounted(async () => {
           <el-carousel-item v-for="item in data.photos" :key="item.id">
             <img
               class="rounded-sm w-full h-full object-cover"
-              :src="`http://localhost:3000${item.url}`"
+              :src="`http://localhost:3001${item.url}`"
               alt="Post Image"
             />
           </el-carousel-item>
@@ -215,7 +215,7 @@ onMounted(async () => {
         <p>{{ iconItem.countData + ' ' + iconItem.text }}</p>
       </div>
     </div>
-    <div class="border-t flex">
+    <!-- <div class="border-t flex">
       <input placeholder="Bình luận bài viết" class="w-full px-3 py-4" />
       <button class="text-blue-500">
         <svg
@@ -233,7 +233,7 @@ onMounted(async () => {
           />
         </svg>
       </button>
-    </div>
+    </div> -->
   </div>
   <CreatePost ref="createPostRef" />
   <PostDetail ref="postDetailRef" :data="data" @fetchCommentsData="fetchComment" />

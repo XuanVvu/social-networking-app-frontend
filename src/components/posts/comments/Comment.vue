@@ -57,7 +57,7 @@ const setHover = (value: boolean) => {
     <div class="cursor-pointer" @click="gotoProfile(data.author.id)">
       <img
         v-if="data.author?.avatar"
-        :src="`http://localhost:3000/uploads/avatars/${data.author?.avatar}`"
+        :src="`http://localhost:3001/uploads/avatars/${data.author?.avatar}`"
         class="w-[32px] h-[32px] rounded-full object-cover"
       />
       <el-avatar v-else :icon="UserFilled" class="w-[32px] h-[32px]"></el-avatar>

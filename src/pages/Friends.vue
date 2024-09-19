@@ -54,7 +54,6 @@ const getNonFriends = async () => {
 }
 
 onMounted(async () => {
-  getFriendsOrRequest(true)
   if (route.query.status === 'non-friend') {
     getNonFriends()
     value.value = 'Option1'

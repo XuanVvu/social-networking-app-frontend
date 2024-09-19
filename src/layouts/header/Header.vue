@@ -67,7 +67,7 @@ onMounted(() => {
       >
         <el-avatar
           v-if="user?.avatar"
-          :src="`http://localhost:3000/uploads/avatars/${user?.avatar}`"
+          :src="`http://localhost:3001/uploads/avatars/${user?.avatar}`"
         >
         </el-avatar>
         <el-avatar v-else :icon="UserFilled"> </el-avatar>
