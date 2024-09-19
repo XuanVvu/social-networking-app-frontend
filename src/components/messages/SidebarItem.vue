@@ -13,7 +13,7 @@ const route = useRoute()
     <div class="mr-3">
       <img
         v-if="contact?.avatar"
-        :src="`http://localhost:3000/uploads/avatars/${contact?.avatar}`"
+        :src="`http://localhost:3001/uploads/avatars/${contact?.avatar}`"
         class="w-12 h-12 rounded-full object-cover"
       />
       <el-avatar class="w-12 h-12" v-else :icon="UserFilled"></el-avatar>

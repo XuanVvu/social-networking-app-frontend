@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Login from '@/assets/login-bg.jpg'
-import { ComponentSize, FormInstance, FormRules } from 'element-plus'
+import { ComponentSize, ElNotification, FormInstance, FormRules } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { Lock, User } from '@element-plus/icons-vue'
 import logo from '@/assets/logo.png'
@@ -33,6 +33,11 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
       password: form.password
     })
     navigateTo('/login')
+    ElNotification({
+      title: 'Thành công',
+      message: 'Đăng ký thành công!',
+      type: 'success'
+    })
   })
 }
 
@@ -116,6 +121,12 @@ const rules = reactive<
               Đăng ký
             </Button>
           </el-form-item>
+          <div class="text-center">
+            <p class="mb-4">
+              Bạn đã có tài khoản?
+              <a href="/login" class="text-blue-600 font-semibold">Đăng nhập</a>
+            </p>
+          </div>
         </el-form>
       </div>
     </div>

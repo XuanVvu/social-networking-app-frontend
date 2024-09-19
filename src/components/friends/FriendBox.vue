@@ -50,7 +50,7 @@ onMounted(() => {
       @click="gotoProfile"
     >
       <img
-        :src="data?.avatar ? `http://localhost:3000/uploads/avatars/${data.avatar}` : avt"
+        :src="data?.avatar ? `http://localhost:3001/uploads/avatars/${data.avatar}` : avt"
         alt=""
         class="w-[190px] h-[230px] object-cover"
       />

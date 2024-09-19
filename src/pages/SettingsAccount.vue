@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import InputBase from '@/components/base/InputBase.vue'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import callApi from '@/services/api'
 import useNavigation from '@/composables/useNavigation'
 import { useAuthStore } from '@/store/auth'
@@ -31,7 +31,7 @@ const submitUpdate = async () => {
   const formData = new FormData()
   formData.append('firstName', form.firstName ? form.firstName : currentUserData.firstName)
   formData.append('lastName', form.lastName ? form.lastName : currentUserData.lastName)
-  formData.append('genders', form.genders ? form.genders : currentUserData.genders)
+  formData.append('genders', form.genders ? form.genders : currentUserData.gender)
   formData.append('description', form.description ? form.description : currentUserData.description)
   fileList.value.forEach((file) => {
     formData.append('avatar', file.raw)
@@ -44,6 +44,15 @@ const submitUpdate = async () => {
   authStore.fetchUserInfo()
   navigationId('Posts', currentUserId)
 }
+
+onMounted(async () => {
+  const userData = await callApi.get(`/users/${currentUserId}`)
+  console.log(userData)
+  form.firstName = userData.firstName
+  form.lastName = userData.lastName
+  form.description = userData.description
+  form.genders = `${userData.gender}`
+})
 </script>
 <template>
   <div class="p-[60px]" style="height: calc(100vh - 80px)">

@@ -35,7 +35,7 @@ onMounted(async () => {
       <div class="mr-3">
         <img
           v-if="friend?.avatar"
-          :src="`http://localhost:3000/uploads/avatars/${friend?.avatar}`"
+          :src="`http://localhost:3001/uploads/avatars/${friend?.avatar}`"
           :alt="friend.name"
           class="w-10 h-10 rounded-full"
         />

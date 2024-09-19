@@ -6,7 +6,7 @@ const { url } = defineProps<{ url: string }>()
   <div class="">
     <img
       class="w-full rounded-md object-cover h-[300px]"
-      :src="`http://localhost:3000${url}`"
+      :src="`http://localhost:3001${url}`"
       alt="Post Image"
     />
   </div>

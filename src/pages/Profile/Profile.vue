@@ -7,6 +7,7 @@ import { useProfileStore } from '@/store/profile'
 import { UserFilled } from '@element-plus/icons-vue'
 import callApi from '@/services/api'
 import { useChatStore } from '@/store/chatStore'
+import { IMAGE_URL } from '@/constants/baseUrl'
 
 const route = useRoute()
 const router = useRouter()
@@ -102,9 +103,6 @@ const getFriendsStatus = async () => {
 
 onMounted(async () => {
   await profileStore.fetchPosts(Number(route.params.id))
-
-  console.log(profileStore.getPosts.length)
-
   getFriendsStatus()
   isDataReady.value = true
 })
@@ -113,7 +111,7 @@ onMounted(async () => {
   <div class="flex bg-white justify-center gap-[100px] py-[30px]">
     <div class="" v-if="user?.avatar">
       <img
-        :src="`http://localhost:3000/uploads/avatars/${user.avatar}`"
+        :src="`http://localhost:3001/uploads/avatars/${user.avatar}`"
         class="object-cover w-[200px] h-[200px] rounded-full"
         alt=""
       />
@@ -125,6 +123,13 @@ onMounted(async () => {
         <h3 class="font-bold text-xl">{{ user?.firstName }} {{ user?.lastName }}</h3>
         <span class="text-lg">{{ profileStore.getPosts?.length }} bài viết </span>
       </div>
+      <div class="flex items-center gap-5 mb-5">
+        <div class="font-bold text-xl">Giới tính</div>
+        <div class="">
+          <span>{{ user?.gender === 1 ? 'Nam' : 'Nữ' }}</span>
+        </div>
+      </div>
+
       <div class="font-bold text-xl">Về tôi</div>
       <div class="mb-5">
         <span v-if="user?.description">{{ user?.description }}</span>

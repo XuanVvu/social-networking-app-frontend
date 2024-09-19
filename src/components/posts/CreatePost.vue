@@ -39,7 +39,7 @@ const openDialog = (data?: { id: number; content: string; photos: any[] }) => {
     const listPhotos = data.photos.map((item) => {
       return {
         id: item.id,
-        url: `http://localhost:3000${item.url}`
+        url: `http://localhost:3001${item.url}`
       }
     })
 
