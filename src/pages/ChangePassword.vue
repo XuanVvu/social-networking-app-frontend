@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import InputBase from '@/components/base/InputBase.vue'
-import { FormInstance, FormRules } from 'element-plus'
+import { ElNotification, FormInstance, FormRules } from 'element-plus'
 import useNavigation from '@/composables/useNavigation'
 import callApi from '@/services/api'
 import Button from '@/components/base/Button.vue'
@@ -73,6 +73,11 @@ const submitUpdate = async () => {
 
     if (response.data.status) {
       navigateTo('/login')
+      ElNotification({
+        title: 'Thành công',
+        message: 'Đổi mật khẩu thành công!',
+        type: 'success'
+      })
     } else {
       isOpenDialogErrorLogin.value = true
       return

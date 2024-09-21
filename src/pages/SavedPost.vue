@@ -27,20 +27,26 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="p-[60px]" style="min-height: calc(100vh - 120px)">
+  <div class="p-[60px]" style="min-height: calc(100vh - 80px)">
     <div class="bg-white px-6 py-12 border mb-4 flex items-center justify-between">
       <h1 class="font-bold text-2xl">Bài viết đã lưu</h1>
     </div>
 
     <div class="flex justify-center">
       <div class="w-fit">
-        <div class="my-5" v-for="postItem of savedPostsData" :key="postItem.id">
+        <div
+          class="my-5"
+          v-if="savedPostsData?.length > 0"
+          v-for="postItem of savedPostsData"
+          :key="postItem.id"
+        >
           <PostComponents
             :listPostLiked="listPostLiked"
             :data="postItem.post"
             @remove-savedpost="onRemoveSavedPost"
           />
         </div>
+        <el-empty v-else style="height: calc(100vh - 0)" description="Chưa có bài viết" />
       </div>
     </div>
   </div>

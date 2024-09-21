@@ -4,6 +4,7 @@ import { onMounted, reactive, ref } from 'vue'
 import callApi from '@/services/api'
 import useNavigation from '@/composables/useNavigation'
 import { useAuthStore } from '@/store/auth'
+import { ElNotification } from 'element-plus'
 
 const form = reactive({
   firstName: '',
@@ -43,11 +44,15 @@ const submitUpdate = async () => {
   })
   authStore.fetchUserInfo()
   navigationId('Posts', currentUserId)
+  ElNotification({
+    title: 'Thành công',
+    message: 'Cập nhật thông tin thành công!',
+    type: 'success'
+  })
 }
 
 onMounted(async () => {
   const userData = await callApi.get(`/users/${currentUserId}`)
-  console.log(userData)
   form.firstName = userData.firstName
   form.lastName = userData.lastName
   form.description = userData.description

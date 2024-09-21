@@ -9,7 +9,7 @@ import CreatePost from '@/components/posts/CreatePost.vue'
 import PostDetail from '@/components/posts/PostDetail.vue'
 import DateTime from '@/components/common/DateTime.vue'
 import { computed, onMounted, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import { UserFilled } from '@element-plus/icons-vue'
 import useNavigation from '@/composables/useNavigation'
 import callApi from '@/services/api'
@@ -71,7 +71,7 @@ const fetchComment = async () => {
 const createPostRef = ref()
 const postDetailRef = ref()
 const like = ref(false)
-const { navigationId } = useNavigation()
+const { navigationId, navigateTo } = useNavigation()
 
 const currentUser = localStorage.getItem('currentUser')
 const emit = defineEmits(['post-deleted', 'remove-savedpost'])
@@ -119,6 +119,12 @@ const likedCount = async () => {
 const onSavePost = async () => {
   await callApi.post(`/saved-post/${data.id}`, {})
   fetchSavedPost()
+  navigateTo('/saved-post')
+  ElNotification({
+    title: 'Thành công',
+    message: 'Đã lưu bài viết!',
+    type: 'success'
+  })
 }
 
 const removeSavePost = () => {
