@@ -52,7 +52,6 @@ const feeds = [
 const createPostRef = ref<InstanceType<typeof CreatePost> | null>(null)
 const notificationRef = ref<InstanceType<typeof ListNotifications> | null>(null)
 const currentUser = localStorage.getItem('currentUser')
-const currentUserAvt = JSON.parse(currentUser as any).avatar
 const currentUserId = JSON.parse(currentUser as any).id
 const user = ref()
 
