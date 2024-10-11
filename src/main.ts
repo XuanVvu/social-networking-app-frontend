@@ -11,13 +11,13 @@ import axios from 'axios'
 
 const pinia = createPinia()
 const app = createApp(App)
+app.use(i18n)
 app.use(router)
 app.use(ElementPlus)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 app.use(pinia)
-app.use(i18n)
 
 const token = localStorage.getItem('accessToken')
 
