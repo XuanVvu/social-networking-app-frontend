@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import BlankLayout from '@/layouts/BlankLayout.vue'
-import { useProfileStore } from '@/store/profile'
 
 const routes = [
   {
@@ -157,8 +156,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem('token')
-
+  const isAuthenticated = !!localStorage.getItem('accessToken')
   if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
     next('/login')
   } else {

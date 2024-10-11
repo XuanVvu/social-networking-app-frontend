@@ -15,7 +15,7 @@ class callApi {
 
     this.api.interceptors.request.use(
       (config: any) => {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('accessToken')
         if (token) {
           this.setToken(token)
         }
@@ -33,7 +33,7 @@ class callApi {
       (error: any) => {
         if (error.response && error.response.status === 401) {
           console.error('Unauthorized access, please login again.')
-          localStorage.removeItem('token')
+          localStorage.removeItem('accessToken')
           navigateTo('/login')
         }
         return Promise.reject(error)

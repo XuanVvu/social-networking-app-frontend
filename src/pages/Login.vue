@@ -75,7 +75,7 @@ const onCheckboxChange = (value: boolean) => {
 }
 
 onMounted(() => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('accessToken')
   if (token) {
     navigateTo('/')
   }
@@ -95,7 +95,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="flex flex-col justify-center w-1/2 p-20">
-        <h2 class="text-4xl font-bold mb-10">Đăng nhập tài khoản</h2>
+        <h2 class="text-4xl font-bold mb-10">{{ $t("login") }}</h2>
 
         <el-form
           class="flex flex-col gap-3"
