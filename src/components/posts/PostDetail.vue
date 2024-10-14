@@ -92,7 +92,7 @@ defineExpose({
                   class="font-semibold text-black text-base cursor-pointer"
                   @click="gotoProfile(data.user?.id)"
                 >
-                  {{ data.user?.id + data.user?.firstName + ' ' + data.user?.lastName }}
+                  {{ data.user?.firstName + ' ' + data.user?.lastName }}
                 </div>
                 <div class="text-sm text-gray-500">
                   <DateTime :time="data.createdAt" />
