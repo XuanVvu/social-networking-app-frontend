@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import useNavigation from '@/composables/useNavigation'
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
+import ErrorDialog from './components/common/ErrorDialog.vue';
 onMounted(() => {
   // const token = localStorage.getItem('token')
   // const { navigateTo } = useNavigation()
@@ -13,4 +13,5 @@ onMounted(() => {
 
 <template>
   <router-view></router-view>
+  <error-dialog />
 </template>
