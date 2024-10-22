@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { BASE_URL } from '@/constants/baseUrl'
-import useNavigation from '@/composables/useNavigation'
+import { setupInterceptor } from '@/services/interceptor'
 
-const { navigateTo } = useNavigation()
 class callApi {
   private api: any
   constructor() {
@@ -13,32 +12,7 @@ class callApi {
       }
     })
 
-    this.api.interceptors.request.use(
-      (config: any) => {
-        const token = localStorage.getItem('accessToken')
-        if (token) {
-          this.setToken(token)
-        }
-        return config
-      },
-      (error: any) => {
-        return Promise.reject(error)
-      }
-    )
-
-    this.api.interceptors.response.use(
-      (response: any) => {
-        return response
-      },
-      (error: any) => {
-        if (error.response && error.response.status === 401) {
-          console.error('Unauthorized access, please login again.')
-          localStorage.removeItem('accessToken')
-          navigateTo('/login')
-        }
-        return Promise.reject(error)
-      }
-    )
+    setupInterceptor(this.api)
   }
 
   setToken(token: string) {
