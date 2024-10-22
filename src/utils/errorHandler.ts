@@ -2,7 +2,6 @@ import { ref } from 'vue'
 
 export const visible = ref(false)
 export const errorMessage = ref('')
-
 export const handleClose = () => {
   visible.value = false
 }
