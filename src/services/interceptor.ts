@@ -1,9 +1,10 @@
 import useNavigation from '@/composables/useNavigation'
 import { showError } from '@/utils/errorHandler'
+import { AxiosInstance } from 'axios'
 
 const { navigateTo } = useNavigation()
-export const setupInterceptor = (apiInstance: any) => {
-  apiInstance.interceptor.request.use(
+export const setupInterceptor = (apiInstance: AxiosInstance) => {
+  apiInstance.interceptors.request.use(
     (config: any) => {
       const token = localStorage.getItem('accessToken')
       if (token) {
@@ -15,7 +16,7 @@ export const setupInterceptor = (apiInstance: any) => {
       return Promise.reject(error)
     }
   )
-  apiInstance.interceptor.response.use(
+  apiInstance.interceptors.response.use(
     (response: any) => {
       return response
     },
