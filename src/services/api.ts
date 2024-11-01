@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import { BASE_URL } from '@/constants/baseUrl'
 import { setupInterceptor } from '@/services/interceptor'
 
 class callApi {
-  private api: any
+  private api: AxiosInstance
   constructor() {
     this.api = axios.create({
       baseURL: BASE_URL,

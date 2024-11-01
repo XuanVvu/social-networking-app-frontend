@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
-const { time, classProps } = defineProps<{ time: any; classProps?: string }>()
+const { time, classProps } = defineProps<{ time: Date; classProps?: string }>()
 
 const formattedDate = computed(() => {
   const date = new Date(time)
