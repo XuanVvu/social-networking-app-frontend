@@ -133,7 +133,7 @@ onMounted(() => {
     </div>
   </div>
 
-  <el-dialog
+  <!-- <el-dialog
     v-model="isOpenDialogErrorLogin"
     :title="loginErrorData?.message"
     width="50%"
@@ -146,5 +146,5 @@ onMounted(() => {
         <Button @click="isOpenDialogErrorLogin = false"> Ok </Button>
       </span>
     </template>
-  </el-dialog>
+  </el-dialog> -->
 </template>
