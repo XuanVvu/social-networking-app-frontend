@@ -21,6 +21,10 @@ export const setupInterceptor = (apiInstance: AxiosInstance) => {
       return response
     },
     (error: any) => {
+      if (error.response && error.response.status === 403) {
+        console.log(error)
+        showError('Thông tin đăng nhập không chính xác, vui lòng thử lại.')
+      }
       if (error.response && error.response.status === 401) {
         showError('Unauthorized access. Please login.')
         console.error('Unauthorized access, please login again.')

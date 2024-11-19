@@ -56,7 +56,6 @@ const rules = reactive<FormRules<RuleChangePasswordForm>>({
 
 const submitUpdate = async () => {
   if (!ruleChangePasswordFormRef.value) {
-    console.error('formEl is undefined')
     return
   }
 
@@ -105,17 +104,17 @@ const submitUpdate = async () => {
         <el-form-item prop="currentPassword" label="Mật khẩu hiện tại">
           <InputBase
             type="password"
-            placehoder="Mật khẩu hiện tại"
+            placeholder="Mật khẩu hiện tại"
             v-model="form.currentPassword"
           />
         </el-form-item>
         <el-form-item prop="newPassword" label="Mật khẩu mới">
-          <InputBase type="password" placehoder="Mật khẩu mới" v-model="form.newPassword" />
+          <InputBase type="password" placeholder="Mật khẩu mới" v-model="form.newPassword" />
         </el-form-item>
         <el-form-item prop="confirmPassword" label="Xác nhận mật khẩu">
           <InputBase
             type="password"
-            placehoder="Xác nhận mật khẩu"
+            placeholder="Xác nhận mật khẩu"
             v-model="form.confirmPassword"
           />
         </el-form-item>
@@ -123,7 +122,7 @@ const submitUpdate = async () => {
         <el-form-item class="update-btn">
           <button
             class="bg-blue-600 px-5 py-2 rounded-2xl text-white"
-            @submit.prevent="submitUpdate(ruleChangePasswordFormRef)"
+            @submit.prevent="submitUpdate()"
           >
             Cập nhật
           </button>

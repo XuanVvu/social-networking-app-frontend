@@ -96,21 +96,21 @@ const rules = reactive<
           status-icon
         >
           <el-form-item prop="firstName">
-            <InputBase type="text" placehoder="First name" v-model="form.firstName" />
+            <InputBase type="text" placeholder="First name" v-model="form.firstName" />
           </el-form-item>
           <el-form-item prop="firstName">
-            <InputBase type="text" placehoder="Last name" v-model="form.lastName" />
+            <InputBase type="text" placeholder="Last name" v-model="form.lastName" />
           </el-form-item>
           <el-form-item prop="email">
-            <InputBase type="email" placehoder="Email" v-model="form.email" :icon="User" />
+            <InputBase type="email" placeholder="Email" v-model="form.email" :icon="User" />
           </el-form-item>
           <el-form-item prop="password">
-            <InputBase type="password" placehoder="Mật khẩu" v-model="form.password" :icon="Lock" />
+            <InputBase type="password" placeholder="Mật khẩu" v-model="form.password" :icon="Lock" />
           </el-form-item>
           <el-form-item prop="confirmPassword">
             <InputBase
               type="password"
-              placehoder="Nhập lại mật khẩu"
+              placeholder="Nhập lại mật khẩu"
               v-model="form.confirmPassword"
               :icon="Lock"
             />

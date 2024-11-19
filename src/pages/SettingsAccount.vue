@@ -74,10 +74,10 @@ onMounted(async () => {
         @submit.prevent="submitUpdate"
       >
         <el-form-item prop="firstName" label="Tên">
-          <InputBase type="text" placehoder="Tên" v-model="form.firstName" />
+          <InputBase type="text" placeholder="Tên" v-model="form.firstName" />
         </el-form-item>
         <el-form-item prop="firstName" label="Họ">
-          <InputBase type="text" placehoder="Họ" v-model="form.lastName" />
+          <InputBase type="text" placeholder="Họ" v-model="form.lastName" />
         </el-form-item>
         <el-form-item prop="description" label="Giới tính">
           <el-radio-group v-model="form.genders" class="ml-4">
