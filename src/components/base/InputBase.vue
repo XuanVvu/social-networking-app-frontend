@@ -5,7 +5,7 @@ const props = defineProps<{
   modelValue: string
   icon?: Component
   type?: string
-  placehoder: string
+  placeholder: string
 }>()
 const emit = defineEmits(['update:modelValue'])
 
@@ -19,7 +19,7 @@ const isPasswordType = computed(() => props.type === 'password')
 <template>
   <el-input
     :type="type ? type : 'text'"
-    :placeholder="placehoder"
+    :placeholder="placeholder"
     :prefix-icon="props.icon"
     v-model="inputValue"
     size="large"
