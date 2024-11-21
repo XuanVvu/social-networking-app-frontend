@@ -13,7 +13,6 @@ const clickImage = () => {
 
 onMounted(() => {
   listPhotos.value = profileStore.getPhotos
-  console.log(listPhotos.value)
 })
 </script>
 <template>

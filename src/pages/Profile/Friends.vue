@@ -21,7 +21,6 @@ const getFriends = async () => {
     return item.requester
   })
   friends.value = friendsAccepted
-  console.log(friends.value)
 }
 
 onMounted(async () => {
@@ -30,11 +29,11 @@ onMounted(async () => {
 </script>
 <template>
   <div class="" style="min-height: calc(100vh - 395px)">
-    <div class="flex gap-2 flex-wrap">
+    <div class="flex gap-2 flex-wrap" v-if="friends?.length > 0">
       <div v-for="item of friends">
         <FriendBox :role-friend="0" :data="item" @updateFriends="getFriends" />
       </div>
     </div>
-    <!-- <el-empty v-if="friends.length === 0" description="Không có bạn bè" /> -->
+    <el-empty v-else description="Không có bạn bè" />
   </div>
 </template>

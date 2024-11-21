@@ -22,7 +22,6 @@ export const setupInterceptor = (apiInstance: AxiosInstance) => {
     },
     (error: any) => {
       if (error.response && error.response.status === 403) {
-        console.log(error)
         showError('Thông tin đăng nhập không chính xác, vui lòng thử lại.')
       }
       if (error.response && error.response.status === 401) {

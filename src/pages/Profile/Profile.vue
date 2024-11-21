@@ -6,15 +6,15 @@ import useNavigation from '@/composables/useNavigation'
 import { useProfileStore } from '@/store/profile'
 import { UserFilled } from '@element-plus/icons-vue'
 import callApi from '@/services/api'
-import { useChatStore } from '@/store/chatStore'
-import { IMAGE_URL } from '@/constants/baseUrl'
+import ListPost from '@/pages/Profile/ListPost.vue'
+import Images from '@/pages/Profile/Images.vue'
+import Friends from '@/pages/Profile/Friends.vue'
 
 const route = useRoute()
 const router = useRouter()
-const { navigateTo, navigationId } = useNavigation()
+const { navigationId } = useNavigation()
 const activeName = ref('')
 const friendStatusData = ref()
-const chatStore = useChatStore()
 
 const profileStore = useProfileStore()
 const isDataReady = ref(false)
@@ -22,21 +22,18 @@ const currentUser = localStorage.getItem('currentUser')
 const currentUserData = JSON.parse(currentUser as any)
 const user = ref()
 
-const handleClick = (tab: TabsPaneContext) => {
+const handleClick = async (tab: TabsPaneContext) => {
   switch (tab.props.name) {
     case 'first':
-      navigateTo('/profile/posts')
       navigationId('Posts', Number(route.params.id))
       break
     case 'second':
       activeName.value = 'second'
-      navigateTo('/profile/images')
       navigationId('Images', Number(route.params.id))
       break
     case 'third':
       activeName.value = 'third'
       navigationId('ProfileFriends', Number(route.params.id))
-
       break
     default:
       break
@@ -90,12 +87,6 @@ const handleChat = async () => {
 
 watch(() => route.name, updateActiveTab, { immediate: true })
 
-watchEffect(async () => {
-  await profileStore.fetchPosts(Number(route.params.id))
-  const userData = await callApi.get(`/users/${route.params.id}`)
-  user.value = userData
-})
-
 const getFriendsStatus = async () => {
   const friendStatus = await callApi.get(`/friends/status/${Number(route.params.id)}`)
   friendStatusData.value = friendStatus.status
@@ -103,6 +94,7 @@ const getFriendsStatus = async () => {
 
 onMounted(async () => {
   await profileStore.fetchPosts(Number(route.params.id))
+  user.value = await callApi.get(`/users/${route.params.id}`)
   getFriendsStatus()
   isDataReady.value = true
 })
@@ -110,11 +102,8 @@ onMounted(async () => {
 <template>
   <div class="flex bg-white justify-center gap-[100px] py-[30px]">
     <div class="" v-if="user?.avatar">
-      <img
-        :src="`http://localhost:3001/uploads/avatars/${user.avatar}`"
-        class="object-cover w-[200px] h-[200px] rounded-full"
-        alt=""
-      />
+      <img :src="`http://localhost:3001/uploads/avatars/${user.avatar}`"
+        class="object-cover w-[200px] h-[200px] rounded-full" alt="" />
     </div>
     <el-avatar v-else :icon="UserFilled" class="w-[200px] h-[200px]"></el-avatar>
 
@@ -137,33 +126,21 @@ onMounted(async () => {
       </div>
       <div class="flex gap-5 text-white" v-if="Number(route.params.id) !== currentUserData.id">
         <div>
-          <button
-            class="bg-blue-600 px-5 py-2 rounded-2xl hover:opacity-90"
-            v-if="friendStatusData === 'not_friends'"
-            @click="addFriend"
-          >
+          <button class="bg-blue-600 px-5 py-2 rounded-2xl hover:opacity-90" v-if="friendStatusData === 'not_friends'"
+            @click="addFriend">
             Kết bạn
           </button>
-          <button
-            class="bg-slate-600 px-5 py-2 rounded-2xl hover:opacity-90"
-            v-if="friendStatusData === 'pending_request'"
-            @click="acceptFriend"
-          >
+          <button class="bg-slate-600 px-5 py-2 rounded-2xl hover:opacity-90"
+            v-if="friendStatusData === 'pending_request'" @click="acceptFriend">
             Chấp nhận
           </button>
-          <button
-            class="bg-red-600 px-5 py-2 rounded-2xl hover:opacity-90"
-            v-if="friendStatusData === 'friends'"
-            @click="removeFriend"
-          >
+          <button class="bg-red-600 px-5 py-2 rounded-2xl hover:opacity-90" v-if="friendStatusData === 'friends'"
+            @click="removeFriend">
             Gỡ kết bạn
           </button>
 
-          <button
-            class="bg-red-600 px-5 py-2 rounded-2xl hover:opacity-90"
-            v-if="friendStatusData === 'sent_request'"
-            @click="cancelFriendRequest"
-          >
+          <button class="bg-red-600 px-5 py-2 rounded-2xl hover:opacity-90" v-if="friendStatusData === 'sent_request'"
+            @click="cancelFriendRequest">
             Huỷ lời mời
           </button>
         </div>
@@ -174,17 +151,15 @@ onMounted(async () => {
     </div>
   </div>
   <el-tabs v-model="activeName" @tab-click="handleClick" v-if="isDataReady">
-    <el-tab-pane label="Bài viết" name="first">
-      <router-view></router-view>
+    <el-tab-pane label="Bài viết" name="first" :lazy="true">
+      <list-post />
     </el-tab-pane>
-    <el-tab-pane label="Ảnh" name="second">
-      <div class="w-[1000px]">
-        <router-view></router-view>
-      </div>
+    <el-tab-pane label="Ảnh" name="second" :lazy="true">
+      <images />
     </el-tab-pane>
-    <el-tab-pane label="Bạn bè" name="third" v-if="Number(route.params.id) === currentUserData.id">
+    <el-tab-pane label="Bạn bè" name="third" :lazy="true" v-if="Number(route.params.id) === currentUserData.id">
       <div class="w-[1000px]">
-        <router-view></router-view>
+        <friends />
       </div>
     </el-tab-pane>
   </el-tabs>
@@ -229,10 +204,12 @@ onMounted(async () => {
   padding-top: 18px;
   font-size: 16px;
 }
+
 .el-avatar svg {
   width: 100%;
   height: 100%;
 }
+
 .el-avatar .el-icon {
   width: 100%;
   height: 70%;
