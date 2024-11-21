@@ -32,7 +32,6 @@ onMounted(async () => {
       chatId: item.id
     }
   })
-  console.log(contacts.value)
 })
 </script>
 <template>
