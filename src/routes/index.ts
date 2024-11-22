@@ -116,12 +116,17 @@ const routes = [
       {
         path: 'information',
         name: 'SettingsInformation',
-        component: () => import('@/pages/SettingsAccount.vue')
+        component: () => import('@/pages/SettingsScreen/SettingsAccount.vue')
       },
       {
         path: 'change-password',
         name: 'ChangePassword',
-        component: () => import('@/pages/ChangePassword.vue')
+        component: () => import('@/pages/SettingsScreen/ChangePassword.vue')
+      },
+      {
+        path: 'setting-app',
+        name: 'SettingApplication',
+        component: () => import('@/pages/SettingsScreen/SettingsApp.vue')
       }
     ]
   },
