@@ -19,10 +19,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 app.use(pinia)
 app.config.globalProperties.$api = callApi
-// const token = localStorage.getItem('accessToken')
-
-// if (token) {
-//   callApi.setToken(token)
-//   axios.defaults.headers.common['Authorization'] = token
-// }
 app.mount('#app')

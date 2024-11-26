@@ -7,7 +7,7 @@ const messages = { en, vi }
 export default createI18n({
   legacy: false,
   globalInjection: true,
-  locale: 'en',
+  locale: 'vi',
   fallbackFormat: 'en',
   messages: messages
 })

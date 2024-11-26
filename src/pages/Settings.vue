@@ -9,6 +9,10 @@ const gotoSettingAccount = () => {
 const gotoSettingChangePassword = () => {
   navigateTo('/settings/change-password')
 }
+
+const gotoSettingApp = () => {
+  navigateTo('/settings/setting-app')
+}
 </script>
 <template>
   <div class="p-[60px]" style="height: calc(100vh - 80px)">
@@ -22,6 +26,10 @@ const gotoSettingChangePassword = () => {
 
     <div class="bg-white py-5 px-4 border mb-4" @click="gotoSettingChangePassword">
       <div class="px-4 py-3 cursor-pointer hover:bg-slate-50 rounded-md">Đổi mật khẩu</div>
+    </div>
+
+    <div class="bg-white py-5 px-4 border mb-4" @click="gotoSettingApp">
+      <div class="px-4 py-3 cursor-pointer hover:bg-slate-50 rounded-md">Cài đặt</div>
     </div>
     <div class="bg-white py-5 px-4 border mb-4">
       <div class="px-4 py-3 cursor-pointer hover:bg-slate-50 rounded-md">Giúp đỡ</div>

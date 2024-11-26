@@ -5,6 +5,7 @@ import { ElNotification, FormInstance, FormRules } from 'element-plus'
 import useNavigation from '@/composables/useNavigation'
 import callApi from '@/services/api'
 import Button from '@/components/base/Button.vue'
+import SettingsScreenCommon from '@/components/settings/SettingsScreenCommon.vue'
 
 export interface RuleChangePasswordForm {
   currentPassword: string
@@ -87,62 +88,39 @@ const submitUpdate = async () => {
 }
 </script>
 <template>
-  <div class="p-[60px]" style="height: calc(100vh - 80px)">
-    <div class="bg-white px-6 py-12 border mb-8 flex items-center justify-between">
-      <h1 class="font-bold text-2xl">Thông tin cá nhân</h1>
-    </div>
+  <settings-screen-common label="Đổi mật khẩu">
+    <el-form class="flex flex-col gap-3 change-password-wrapper" ref="ruleChangePasswordFormRef" status-icon
+      :model="form" :rules="rules" @submit.prevent="submitUpdate">
+      <el-form-item prop="currentPassword" label="Mật khẩu hiện tại">
+        <InputBase type="password" placeholder="Mật khẩu hiện tại" v-model="form.currentPassword" />
+      </el-form-item>
+      <el-form-item prop="newPassword" label="Mật khẩu mới">
+        <InputBase type="password" placeholder="Mật khẩu mới" v-model="form.newPassword" />
+      </el-form-item>
+      <el-form-item prop="confirmPassword" label="Xác nhận mật khẩu">
+        <InputBase type="password" placeholder="Xác nhận mật khẩu" v-model="form.confirmPassword" />
+      </el-form-item>
 
-    <div class="bg-white py-5 px-4 border mb-4">
-      <el-form
-        class="flex flex-col gap-3"
-        ref="ruleChangePasswordFormRef"
-        status-icon
-        :model="form"
-        :rules="rules"
-        @submit.prevent="submitUpdate"
-      >
-        <el-form-item prop="currentPassword" label="Mật khẩu hiện tại">
-          <InputBase
-            type="password"
-            placeholder="Mật khẩu hiện tại"
-            v-model="form.currentPassword"
-          />
-        </el-form-item>
-        <el-form-item prop="newPassword" label="Mật khẩu mới">
-          <InputBase type="password" placeholder="Mật khẩu mới" v-model="form.newPassword" />
-        </el-form-item>
-        <el-form-item prop="confirmPassword" label="Xác nhận mật khẩu">
-          <InputBase
-            type="password"
-            placeholder="Xác nhận mật khẩu"
-            v-model="form.confirmPassword"
-          />
-        </el-form-item>
+      <el-form-item class="update-btn">
+        <button class="bg-blue-600 px-5 py-2 rounded-2xl text-white" @submit.prevent="submitUpdate()">
+          Cập nhật
+        </button>
+      </el-form-item>
+    </el-form>
 
-        <el-form-item class="update-btn">
-          <button
-            class="bg-blue-600 px-5 py-2 rounded-2xl text-white"
-            @submit.prevent="submitUpdate()"
-          >
-            Cập nhật
-          </button>
-        </el-form-item>
-      </el-form>
-
-      <el-dialog v-model="isOpenDialogErrorLogin" width="50%" align-center class="rounded-lg p-8">
-        <span class="my-8">Mật khẩu không chính xác. Vui lòng thử lại!</span>
-        <template #footer>
-          <span class="dialog-footer">
-            <Button @click="isOpenDialogErrorLogin = false"> Ok </Button>
-          </span>
-        </template>
-      </el-dialog>
-    </div>
-  </div>
+    <el-dialog v-model="isOpenDialogErrorLogin" width="50%" align-center class="rounded-lg p-8">
+      <span class="my-8">Mật khẩu không chính xác. Vui lòng thử lại!</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <Button @click="isOpenDialogErrorLogin = false"> Ok </Button>
+        </span>
+      </template>
+    </el-dialog>
+  </settings-screen-common>
 </template>
 
 <style lang="scss">
-.el-form-item__label {
+.change-password-wrapper .el-form-item__label {
   width: 150px;
   justify-content: flex-start;
 }
