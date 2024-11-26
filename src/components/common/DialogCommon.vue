@@ -1,29 +1,22 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
-const visible = ref(false);
-const dialogRef = ref<HTMLDivElement | null>(null)
+const refSlot = ref()
+const visible = ref(true);
+const emit = defineEmits(['close']);
+watch(visible, () => {
+    emit('close');
 
-// export const method = {
-//     opening() {
-//         visible.value = true;
-//     },
-//     closing() {
-//         visible.value = false;
-//     },
-//     getElDialog() {
-//         return dialogRef.value
-//     }
-// }
+})
 
 onMounted(() => {
-    console.log(dialogRef);
+    console.log('test common');
 
 })
 
 </script>
 <template>
-    <el-dialog ref="dialogRef" v-model="visible">
-        123
+    <el-dialog v-model="visible">
+        <slot ref="refSlot" />
     </el-dialog>
 </template>

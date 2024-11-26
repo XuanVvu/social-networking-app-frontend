@@ -2,10 +2,10 @@
 import SettingsScreenCommon from '@/components/settings/SettingsScreenCommon.vue';
 import { useIsDirty } from '@/utils/formUtil';
 import { FormInstance, FormRules } from 'element-plus';
-import { reactive, ref } from 'vue';
+import { h, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDialog } from '@/utils/useDialog'
-import TestDialog from './TestDialog.vue';
+import TestDialog from "@/pages/SettingsScreen/TestDialog.vue"
 import DialogCommon from "@/components/common/DialogCommon.vue"
 
 export interface RuleSettingsAppForm { }
@@ -32,7 +32,7 @@ const submitUpdate = () => {
 
 const { openDialog } = useDialog()
 const openDialogTest = () => {
-    openDialog(TestDialog)
+    openDialog(TestDialog, { a: 1111123 })
 }
 
 </script>
@@ -70,8 +70,6 @@ const openDialogTest = () => {
             </template>
 </el-dialog>
 </div> -->
-
-    <dialog-common>dsadsads</dialog-common>
 
 </template>
 

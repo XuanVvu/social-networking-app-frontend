@@ -1,24 +1,35 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { IOptionDialog } from '@/utils/useDialog';
+import { onBeforeMount, onMounted } from 'vue';
 
-const centerDialogVisible = ref(true)
+const { a } = defineProps<{ a: any }>()
+const opening = async () => {
+    console.log('opening');
 
-const opening = () => {
-    console.log(123);
+}
+const closing = async () => {
+    console.log('closing');
 
 }
 
+defineExpose({ opening, closing })
+
+onMounted(() => {
+    console.log('test component mounted');
+
+    console.log(a);
+
+
+})
+onBeforeMount(() => {
+    console.log('test component before mount');
+
+})
+// export const dialogMethods: IOptionDialog = { opening, closing }
 </script>
+
+<!-- <script lang="ts" setup></script> -->
+
 <template>
-    <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" align-center>
-        <span>Open the dialog from the center from the screen</span>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="centerDialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="centerDialogVisible = false">
-                    Confirm
-                </el-button>
-            </span>
-        </template>
-    </el-dialog>
+    <div>aaaaa</div>
 </template>
